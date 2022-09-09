@@ -7,6 +7,7 @@ from rclpy.action import ActionClient
 from rclpy.node import Node
 from control_msgs.action import FollowJointTrajectory
 from trajectory_msgs.msg import JointTrajectoryPoint
+
 # ros2 action list -t
 # ros2 action info /joint_trajectory_controller/follow_joint_trajectory -t
 # ros2 interface show control_msgs/action/FollowJointTrajectory
@@ -31,7 +32,7 @@ class OneDofArmActionClient(Node):
         point2.time_from_start = Duration(seconds=1, nanoseconds=0).to_msg()
         point2.positions = [angle]
 
-        points.append(point1)
+        #points.append(point1)
         points.append(point2)
 
         goal_msg.goal_time_tolerance = Duration(seconds=1, nanoseconds=0).to_msg()

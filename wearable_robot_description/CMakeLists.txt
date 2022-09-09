@@ -45,7 +45,7 @@ install(
 
 install(
   PROGRAMS
-  launch/spawn_1_dof_arm.py
+  launch/spawn_entity.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

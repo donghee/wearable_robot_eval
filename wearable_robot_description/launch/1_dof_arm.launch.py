@@ -63,7 +63,7 @@ def generate_launch_description():
             'use_sim_time',
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
-        Node(package='wearable_robot_description', executable='spawn_1_dof_arm.py', arguments=[robot_desc], output='screen'),
+        Node(package='wearable_robot_description', executable='spawn_entity.py', arguments=[robot_desc], output='screen'),
         Node(
             package="robot_state_publisher",
             executable="robot_state_publisher",
