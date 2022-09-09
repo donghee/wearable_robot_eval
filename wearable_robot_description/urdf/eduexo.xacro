@@ -16,8 +16,7 @@
     <link name="base_link">
         <visual>
             <geometry>
-                <!-- <mesh filename="package://wearable_robot_description/meshes/eduexo_base_link.dae" scale="0.01 0.01 0.01"/> -->
-                <mesh filename="/home/donghee/ros2_ws/src/wearable_robot_eval/wearable_robot_description/meshes/eduexo_base_link.dae" scale="0.01 0.01 0.01"/>
+                <mesh filename="$(find wearable_robot_description)/meshes/eduexo_base_link.dae" scale="0.01 0.01 0.01"/>
             </geometry>
             <origin rpy="0 0 0" xyz="0 0 0.6"/>
             <material name="blue">
@@ -49,8 +48,7 @@
     <link name="arm_link">
         <visual>
             <geometry>
-                <!-- <mesh filename="package://wearable_robot_description/meshes/eduexo_arm_link.dae" scale="0.01 0.01 0.01"/> -->
-                <mesh filename="/home/donghee/ros2_ws/src/wearable_robot_eval/wearable_robot_description/meshes/eduexo_arm_link.dae" scale="0.01 0.01 0.01"/>
+                <mesh filename="$(find wearable_robot_description)/meshes/eduexo_arm_link.dae" scale="0.01 0.01 0.01"/>
             </geometry>
             <origin rpy="0 -1.570796 0" xyz="0.0 0 0"/>
             <material name="red">
