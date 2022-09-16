@@ -2,6 +2,27 @@
 
 ## Install
 
+ROS2 foxy in Docker
+
+```
+xhost +local:root
+
+docker run -it \
+    --privileged -v /dev/bus/usb:/dev/bus/usb \
+    --user $(id -u) \
+    --env="DISPLAY" \
+    --env="QT_X11_NO_MITSHM=1" \
+    --workdir="/home/$USER" \
+    --volume="/home/$USER:/home/$USER" \
+    --volume="/etc/group:/etc/group:ro" \
+    --volume="/etc/passwd:/etc/passwd:ro" \
+    --volume="/etc/shadow:/etc/shadow:ro" \
+    --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
+    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    osrf/ros:foxy-desktop \
+    bash
+```
+
 Required ROS packages
 
 ```
