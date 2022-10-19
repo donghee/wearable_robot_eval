@@ -15,24 +15,22 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 class OneDofArmActionClient(Node):
 
     def __init__(self):
-        super().__init__('one_dof_arm_actionclient')
+        super().__init__('human_right_arm_actionclient')
         self._action_client = ActionClient(self, FollowJointTrajectory, '/joint_trajectory_controller/follow_joint_trajectory')
 
     def send_goal(self, angle):
         goal_msg = FollowJointTrajectory.Goal()
 
         # Fill in data for trajectory
-        joint_names = ["arm_joint"]
+        joint_names = ["jRightElbow_rotx"]
 
         points = []
         point1 = JointTrajectoryPoint()
         point1.positions = [1.8]
-        #point1.velocities = [0.0]
 
         point2 = JointTrajectoryPoint()
         point2.time_from_start = Duration(seconds=1, nanoseconds=0).to_msg()
         point2.positions = [angle]
-        #point2.velocities = [angle]
 
         #points.append(point1)
         points.append(point2)
