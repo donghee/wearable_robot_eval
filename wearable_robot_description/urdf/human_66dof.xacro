@@ -740,7 +740,7 @@
       <!--box origin wrt jRightAnkle-->
       <origin xyz="0.054652           0   -0.039254" rpy="0 0 0" />
       <geometry>
-	<box size="0.17983    0.074775    0.078509"/>
+        <box size="0.17983    0.074775    0.078509"/>
       </geometry>
     </collision>
 
@@ -851,7 +851,7 @@
       <!--box origin wrt jLeftKnee-->
       <origin xyz="0           0    -0.20304" rpy="0 0 0" />
       <geometry>
-	<cylinder length="0.40608" radius="0.037388"/>
+        <cylinder length="0.40608" radius="0.037388"/>
       </geometry>
       <material name="color"/>
     </visual>
@@ -860,7 +860,7 @@
       <!--box origin wrt jLeftKnee-->
       <origin xyz="0           0    -0.20304" rpy="0 0 0" />
       <geometry>
-	<cylinder length="0.40608" radius="0.037388"/>
+        <cylinder length="0.40608" radius="0.037388"/>
       </geometry>
     </collision>
 
@@ -900,7 +900,7 @@
       <!--box origin wrt jLeftAnkle-->
       <origin xyz="0.054652           0   -0.039254" rpy="0 0 0" />
       <geometry>
-	<box size="0.17983    0.074775    0.078509"/>
+        <box size="0.17983    0.074775    0.078509"/>
       </geometry>
     </collision>
 
@@ -948,7 +948,7 @@
 
   <!--JOINTS-->
   <!--Chain from (2) to (7)-->
-  <joint name="jL5S1_rotx" type="revolute">
+  <joint name="jL5S1_rotx" type="fixed">
     <origin xyz="-0.000206           0    0.098478" rpy="0 0 0"/>
     <parent link="Pelvis"/>
     <child link="L5_f1"/>
@@ -956,7 +956,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jL5S1_roty" type="revolute">
+  <joint name="jL5S1_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="L5_f1"/>
     <child link="L5_f2"/>
@@ -964,7 +964,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 1 0" />
   </joint>
-  <joint name="jL5S1_rotz" type="revolute">
+  <joint name="jL5S1_rotz" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="L5_f2"/>
     <child link="L5"/>
@@ -972,7 +972,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 0 1" />
   </joint>
-  <joint name="jL4L3_rotx" type="revolute">
+  <joint name="jL4L3_rotx" type="fixed">
     <origin xyz="0.000374           0    0.095104" rpy="0 0 0"/>
     <parent link="L5"/>
     <child link="L3_f1"/>
@@ -980,7 +980,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jL4L3_roty" type="revolute">
+  <joint name="jL4L3_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="L3_f1"/>
     <child link="L3_f2"/>
@@ -988,7 +988,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 1 0" />
   </joint>
-  <joint name="jL4L3_rotz" type="revolute">
+  <joint name="jL4L3_rotz" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="L3_f2"/>
     <child link="L3"/>
@@ -996,7 +996,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 0 1" />
   </joint>
-  <joint name="jL1T12_rotx" type="revolute">
+  <joint name="jL1T12_rotx" type="fixed">
     <origin xyz="0           0    0.085916" rpy="0 0 0"/>
     <parent link="L3"/>
     <child link="T12_f1"/>
@@ -1004,7 +1004,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jL1T12_roty" type="revolute">
+  <joint name="jL1T12_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="T12_f1"/>
     <child link="T12_f2"/>
@@ -1012,7 +1012,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 1 0" />
   </joint>
-  <joint name="jL1T12_rotz" type="revolute">
+  <joint name="jL1T12_rotz" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="T12_f2"/>
     <child link="T12"/>
@@ -1020,7 +1020,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 0 1" />
   </joint>
-  <joint name="jT9T8_rotx" type="revolute">
+  <joint name="jT9T8_rotx" type="fixed">
     <origin xyz="0           0    0.085916" rpy="0 0 0"/>
     <parent link="T12"/>
     <child link="T8_f1"/>
@@ -1028,7 +1028,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jT9T8_roty" type="revolute">
+  <joint name="jT9T8_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="T8_f1"/>
     <child link="T8_f2"/>
@@ -1036,7 +1036,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 1 0" />
   </joint>
-  <joint name="jT9T8_rotz" type="revolute">
+  <joint name="jT9T8_rotz" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="T8_f2"/>
     <child link="T8"/>
@@ -1044,7 +1044,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 0 1" />
   </joint>
-  <joint name="jT1C7_rotx" type="revolute">
+  <joint name="jT1C7_rotx" type="fixed">
     <origin xyz="0           0     0.11975" rpy="0 0 0"/>
     <parent link="T8"/>
     <child link="Neck_f1"/>
@@ -1052,7 +1052,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jT1C7_roty" type="revolute">
+  <joint name="jT1C7_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="Neck_f1"/>
     <child link="Neck_f2"/>
@@ -1068,7 +1068,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 0 1" />
   </joint>
-  <joint name="jC1Head_rotx" type="revolute">
+  <joint name="jC1Head_rotx" type="fixed">
     <origin xyz="0.000152           0    0.089252" rpy="0 0 0"/>
     <parent link="Neck"/>
     <child link="Head_f1"/>
@@ -1076,7 +1076,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jC1Head_roty" type="revolute">
+  <joint name="jC1Head_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="Head_f1"/>
     <child link="Head_f2"/>
@@ -1093,7 +1093,8 @@
     <axis xyz="0 0 1" />
   </joint>
   <!--Chain from (8) to (11)-->
-  <joint name="jRightC7Shoulder_rotx" type="revolute">
+  <!-- Shouler -->
+  <joint name="jRightC7Shoulder_rotx" type="fixed">
     <origin xyz="0   -0.026313    0.067052" rpy="0 0 0"/>
     <parent link="T8"/>
     <child link="RightShoulder_f1"/>
@@ -1101,7 +1102,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jRightC7Shoulder_roty" type="revolute">
+  <joint name="jRightC7Shoulder_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="RightShoulder_f1"/>
     <child link="RightShoulder_f2"/>
@@ -1109,7 +1110,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 1 0" />
   </joint>
-  <joint name="jRightC7Shoulder_rotz" type="revolute">
+  <joint name="jRightC7Shoulder_rotz" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="RightShoulder_f2"/>
     <child link="RightShoulder"/>
@@ -1125,7 +1126,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jRightShoulder_roty" type="revolute">
+  <joint name="jRightShoulder_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="RightUpperArm_f1"/>
     <child link="RightUpperArm_f2"/>
@@ -1149,7 +1150,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jRightElbow_roty" type="revolute">
+  <joint name="jRightElbow_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="RightForeArm_f1"/>
     <child link="RightForeArm_f2"/>
@@ -1196,7 +1197,7 @@
     <axis xyz="0 0 0" />
   </joint>
   <!--Chain from (12) to (15)-->
-  <joint name="jLeftC7Shoulder_rotx" type="revolute">
+  <joint name="jLeftC7Shoulder_rotx" type="fixed">
     <origin xyz="0    0.026313    0.067052" rpy="0 0 0"/>
     <parent link="T8"/>
     <child link="LeftShoulder_f1"/>
@@ -1204,7 +1205,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jLeftC7Shoulder_roty" type="revolute">
+  <joint name="jLeftC7Shoulder_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="LeftShoulder_f1"/>
     <child link="LeftShoulder_f2"/>
@@ -1212,7 +1213,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 1 0" />
   </joint>
-  <joint name="jLeftC7Shoulder_rotz" type="revolute">
+  <joint name="jLeftC7Shoulder_rotz" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="LeftShoulder_f2"/>
     <child link="LeftShoulder"/>
