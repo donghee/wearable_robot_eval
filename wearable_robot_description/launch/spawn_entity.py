@@ -10,10 +10,11 @@ def main(args=None):
     node = rclpy.create_node('minimal_client')
     cli = node.create_client(SpawnEntity, '/spawn_entity')
 
-    content = sys.argv[1]
+    name = sys.argv[1]
+    content = sys.argv[2]
 
     req = SpawnEntity.Request()
-    req.name = "robot_name"
+    req.name = name
     req.xml = content
     req.robot_namespace = ""
     req.reference_frame = "world"

@@ -14,6 +14,7 @@ import xacro
 def generate_launch_description():
     pkg_wearable_robot_path = get_package_share_path('wearable_robot_description')
 
+    one_dof_arm_model_path = pkg_wearable_robot_path / 'urdf/1_dof_arm.xacro'
     default_model_path = pkg_wearable_robot_path / 'urdf/human_66dof.xacro'
     default_rviz_config_path = pkg_wearable_robot_path / 'rviz/urdf.rviz'
 
@@ -36,6 +37,10 @@ def generate_launch_description():
 
     robot_description_config = xacro.process_file(str(default_model_path))
     robot_desc = robot_description_config.toxml()
+
+    one_dof_arm_description_config = xacro.process_file(str(one_dof_arm_model_path))
+    one_dof_arm_desc = one_dof_arm_description_config.toxml()
+
 
     #print(robot_desc)
 
@@ -63,7 +68,8 @@ def generate_launch_description():
             'use_sim_time',
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
-        Node(package='wearable_robot_description', executable='spawn_entity.py', arguments=[robot_desc], output='screen'),
+        Node(package='wearable_robot_description', executable='spawn_entity.py', arguments=['human', robot_desc], output='screen'),
+        Node(package='wearable_robot_description', executable='spawn_entity.py', arguments=['1-dof-arm', one_dof_arm_desc], output='screen'),
         Node(
             package="robot_state_publisher",
             executable="robot_state_publisher",
