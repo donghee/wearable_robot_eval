@@ -6,12 +6,12 @@ import rclpy
 from gazebo_msgs.srv import SpawnEntity
 
 def main(args=None):
-    rclpy.init(args=args)
-    node = rclpy.create_node('minimal_client')
-    cli = node.create_client(SpawnEntity, '/spawn_entity')
-
     name = sys.argv[1]
     content = sys.argv[2]
+ 
+    rclpy.init(args=args)
+    node = rclpy.create_node('minimal_client_' + name)
+    cli = node.create_client(SpawnEntity, '/spawn_entity')
 
     req = SpawnEntity.Request()
     req.name = name

@@ -16,18 +16,18 @@
     <link name="base_link">
         <visual>
             <geometry>
-                <cylinder length="0.4" radius="0.04"/>
+                <cylinder length="0.3" radius="0.01"/>
             </geometry>
-            <origin rpy="0 0 0" xyz="0 0 0.6"/>
+            <origin rpy="0 0 1.570796" xyz="0.72 1 1.275"/>
             <material name="blue">
                 <color rgba="0 0 1 1"/>
             </material>
         </visual>
         <collision>
             <geometry>
-                <cylinder length="0.4" radius="0.06"/>
+                <cylinder length="0.3" radius="0.01"/>
             </geometry>
-            <origin rpy="0 0 0" xyz="0 0 0.6"/>
+            <origin rpy="0 0 1.570796" xyz="0.72 1 1.275"/>
         </collision>
 
         <inertial>
@@ -39,33 +39,112 @@
     <joint name="arm_joint" type="revolute">
         <parent link="base_link"/>
         <child link="arm_link"/>
-        <origin xyz="0 0 0.4"/>
-        <axis xyz="0 1 0" />
-        <limit effort="300" velocity="0.1" lower="4.71" upper="1.8"/>
+        <origin xyz="0.72 1 1.125"/>
+        <axis xyz="0 0 0" />
+        <!-- <limit effort="300" velocity="0.1" lower="4.71" upper="1.8"/> -->
+        <limit effort="300" velocity="0.1" lower="-4.1" upper="-1.5"/>
         <dynamics damping="50" friction="1"/>
     </joint>
 
     <link name="arm_link">
         <visual>
             <geometry>
-                <cylinder length="0.4" radius="0.04"/>
+                <cylinder length="0.25" radius="0.01"/>
             </geometry>
-            <origin rpy="0 1.570796 0" xyz="-0.16 0 0"/>
+            <origin rpy="1.570796 0 0" xyz="0 0.125 0"/>
             <material name="red">
                 <color rgba="1 0 0 1"/>
             </material>
         </visual>
         <collision>
             <geometry>
-                <cylinder length="0.4" radius="0.06"/>
+                <cylinder length="0.25" radius="0.01"/>
             </geometry>
-            <origin rpy="0 1.570796 0" xyz="-0.16 0 0"/>
+            <origin rpy="1.570796 0 0" xyz="0 0.125 0"/>
         </collision>
 
         <inertial>
             <mass value="1"/>
             <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
         </inertial>
+    </link>
+
+    <joint name="hand_link_fix_to_arm_link" type="fixed">
+      <origin xyz="0.12 0.18 0.05" rpy="0 1.570796 0"/>
+      <parent link="arm_link"/>
+      <child link="hand_link"/>
+    </joint>
+
+    <link name="hand_link">
+      <visual>
+        <geometry>
+          <cylinder length="0.01" radius="0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <material name="red">
+          <color rgba="1 0 0 1"/>
+        </material>
+      </visual>
+      <visual>
+        <geometry>
+          <cylinder length="0.01" radius="0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.1 0 0"/>
+        <material name="red">
+          <color rgba="1 0 0 1"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder length="0.05" radius="0.02"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
+      </collision>
+      <inertial>
+        <mass value="0.1"/>
+        <inertia ixx="1e-2" iyy="1e-2" izz="1e-2" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
+    </link>
+
+    <joint name="hand_link_fix_to_base_link" type="fixed">
+      <!-- <origin xyz="0.12 0.19 0.05" rpy="0 1.570796 0"/> -->
+      <origin xyz="0.85 0.95 1.25" rpy="0 0 1.570796"/>
+      <axis xyz="0 0 0" />
+      <parent link="base_link"/>
+      <child link="hand_1_link"/>
+    </joint>
+
+    <link name="hand_1_link">
+      <visual>
+        <geometry>
+          <cylinder length="0.01" radius="0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.0 0 0"/>
+        <material name="red">
+          <color rgba="1 0 0 1"/>
+        </material>
+      </visual>
+      <visual>
+        <geometry>
+          <cylinder length="0.01" radius="0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.1 0 0"/>
+        <material name="red">
+          <color rgba="1 0 0 1"/>
+        </material>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder length="0.05" radius="0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
+      </collision>
+      <inertial>
+        <mass value="0.1"/>
+        <inertia ixx="1e-2" iyy="1e-2" izz="1e-2" ixy="0" ixz="0" iyz="0"/>
+      </inertial>
     </link>
 
   <ros2_control name="GazeboSystem" type="system">
@@ -79,7 +158,7 @@
       </command_interface>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
-      <state_interface name="effort"/>
     </joint>
   </ros2_control>
+
 </robot>

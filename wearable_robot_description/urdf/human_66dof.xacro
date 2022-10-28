@@ -2,8 +2,7 @@
 
 <robot name="human" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <xacro:include filename="$(find wearable_robot_description)/urdf/human.gazebo"/>
-  <xacro:include filename="$(find wearable_robot_description)/urdf/1_dof_arm.gazebo"/>
+  <!-- <xacro:include filename="$(find wearable_robot_description)/urdf/human_66dof.gazebo"/> -->
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find wearable_robot_description)/urdf/materials.xacro"/>
 
@@ -13,17 +12,17 @@
     <!--   <child link="base_link"/> -->
     <!-- </joint> -->
 
-    <joint name="base_link_fix_to_right_upper_arm" type="fixed">
-      <origin xyz="0    -0.27          0.1" rpy="0 1.570796 1.570796"/>
-      <parent link="RightUpperArm"/>
-      <child link="base_link"/>
-    </joint>
+    <!-- <joint name="base_link_fix_to_right_upper_arm" type="fixed"> -->
+    <!--   <origin xyz="0    -0.27          0.1" rpy="0 1.570796 1.570796"/> -->
+    <!--   <parent link="RightUpperArm"/> -->
+    <!--   <child link="base_link"/> -->
+    <!-- </joint> -->
 
-    <joint name="hand_link_fix_to_arm_link" type="fixed">
-      <origin xyz="0.05    +0.35          0.1" rpy="0 1.570796 0"/>
-      <parent link="arm_link"/>
-      <child link="hand_link"/>
-    </joint>
+    <!-- <joint name="hand_link_fix_to_arm_link" type="fixed"> -->
+    <!--   <origin xyz="0.05    +0.35          0.1" rpy="0 1.570796 0"/> -->
+    <!--   <parent link="arm_link"/> -->
+    <!--   <child link="hand_link"/> -->
+    <!-- </joint> -->
 
     <!-- <joint name="RightHand_fixed" type="fixed"> -->
     <!--   <origin xyz="0 0 0" rpy="0 0 0"/> -->
@@ -37,126 +36,92 @@
     <!--   <child link="hand_link"/> -->
     <!-- </joint> -->
 
-    <link name="base_link">
-        <visual>
-            <geometry>
-                <cylinder length="0.4" radius="0.04"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="0 0 0.2"/>
-            <material name="blue">
-                <color rgba="0 0 1 1"/>
-            </material>
-        </visual>
-        <collision>
-            <geometry>
-                <cylinder length="0.4" radius="0.06"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="0 0 0.2"/>
-        </collision>
-        <inertial>
-            <mass value="0.1"/>
-            <inertia ixx="1e-2" iyy="1e-2" izz="1e-2" ixy="0" ixz="0" iyz="0"/>
-        </inertial>
-    </link>
+  <!--   <link name="base_link"> -->
+  <!--       <visual> -->
+  <!--           <geometry> -->
+  <!--               <cylinder length="0.4" radius="0.04"/> -->
+  <!--           </geometry> -->
+  <!--           <origin rpy="0 0 0" xyz="0 0 0.2"/> -->
+  <!--           <material name="blue"> -->
+  <!--               <color rgba="0 0 1 1"/> -->
+  <!--           </material> -->
+  <!--       </visual> -->
+  <!--       <collision> -->
+  <!--           <geometry> -->
+  <!--               <cylinder length="0.4" radius="0.06"/> -->
+  <!--           </geometry> -->
+  <!--           <origin rpy="0 0 0" xyz="0 0 0.2"/> -->
+  <!--       </collision> -->
+  <!--       <inertial> -->
+  <!--           <mass value="0.1"/> -->
+  <!--           <inertia ixx="1e-2" iyy="1e-2" izz="1e-2" ixy="0" ixz="0" iyz="0"/> -->
+  <!--       </inertial> -->
+  <!--   </link> -->
 
-    <joint name="arm_joint" type="revolute">
-        <parent link="base_link"/>
-        <child link="arm_link"/>
-        <!-- <origin xyz="0 0 1.0"/> -->
-        <origin xyz="0 0 0"/>
-        <axis xyz="1 0 0" />
-        <limit effort="300" velocity="0.1" lower="4.71" upper="1.8"/>
-        <dynamics damping="50" friction="1"/>
-    </joint>
-
-    <link name="arm_link">
-        <visual>
-            <geometry>
-                <cylinder length="0.4" radius="0.04"/>
-            </geometry>
-            <!-- <origin rpy="0 1.570796 0" xyz="-0.16 0 0"/> -->
-            <!-- <origin rpy="0 1.570796 0" xyz="0 0 0"/> -->
-            <origin rpy="1.570796 0 0" xyz="0 0.2 0"/>
-            <material name="red">
-                <color rgba="1 0 0 1"/>
-            </material>
-        </visual>
-        <collision>
-            <geometry>
-                <cylinder length="0.4" radius="0.06"/>
-            </geometry>
-            <!-- <origin rpy="0 1.570796 0" xyz="-0.16 0 0"/> -->
-            <!-- <origin rpy="0 1.570796 0" xyz="0 0 0"/> -->
-            <origin rpy="1.570796 0 0" xyz="0 0.2 0"/>
-        </collision>
-
-        <inertial>
-            <mass value="0.1"/>
-            <inertia ixx="1e-2" iyy="1e-2" izz="1e-2" ixy="0" ixz="0" iyz="0"/>
-        </inertial>
-    </link>
-
-    <link name="hand_link">
-        <visual>
-            <geometry>
-                <cylinder length="0.15" radius="0.04"/>
-            </geometry>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
-            <!-- <origin rpy="0 0 0" xyz="0 -0.2 0"/> -->
-            <material name="red">
-                <color rgba="1 0 0 1"/>
-            </material>
-        </visual>
-        <collision>
-            <geometry>
-                <cylinder length="0.15" radius="0.04"/>
-            </geometry>
-            <!-- <origin rpy="0 1.570796 0" xyz="-0.16 0 0"/> -->
-            <!-- <origin rpy="0 1.570796 0" xyz="0 0 0"/> -->
-            <origin rpy="0 0 0" xyz="0 0 0"/>
-            <!-- <contact_coefficients mu="2.0" kp="2.0" kd="2.0" /> -->
-            <contact_coefficients mu="0" kp="1000.0" kd="1.0"/>
-        </collision>
-
-        <inertial>
-            <mass value="0.1"/>
-            <inertia ixx="1e-2" iyy="1e-2" izz="1e-2" ixy="0" ixz="0" iyz="0"/>
-        </inertial>
-    </link>
-
-  <ros2_control name="GazeboSystem" type="system">
-    <hardware>
-      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-    </hardware>
-    <joint name="arm_joint">
-      <command_interface name="position">
-        <param name="min">1.79</param>
-        <param name="max">6.28</param>
-      </command_interface>
-      <!-- <command_interface name="velocity"> -->
-      <!--   <param name="min">-5</param> -->
-      <!--   <param name="max">5</param> -->
-      <!-- </command_interface> -->
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-      <state_interface name="effort"/>
-    </joint>
-  </ros2_control>
-
-  <!-- <ros2_control name="GazeboSystem" type="system"> -->
-  <!--   <hardware> -->
-  <!--     <plugin>gazebo_ros2_control/GazeboSystem</plugin> -->
-  <!--   </hardware> -->
-  <!--   <joint name="jRightElbow_rotx"> -->
-  <!--     <command_interface name="position"> -->
-  <!--       <param name="min">1.79</param> -->
-  <!--       <param name="max">6.28</param> -->
-  <!--     </command_interface> -->
-  <!--     <state_interface name="position"/> -->
-  <!--     <state_interface name="velocity"/> -->
-  <!--     <state_interface name="acceleration"/> -->
+  <!--   <joint name="arm_joint" type="revolute"> -->
+  <!--       <parent link="base_link"/> -->
+  <!--       <child link="arm_link"/> -->
+  <!--       <!-\- <origin xyz="0 0 1.0"/> -\-> -->
+  <!--       <origin xyz="0 0 0"/> -->
+  <!--       <axis xyz="1 0 0" /> -->
+  <!--       <limit effort="300" velocity="0.1" lower="4.71" upper="1.8"/> -->
+  <!--       <dynamics damping="50" friction="1"/> -->
   <!--   </joint> -->
-  <!-- </ros2_control> -->
+
+  <!--   <link name="arm_link"> -->
+  <!--       <visual> -->
+  <!--           <geometry> -->
+  <!--               <cylinder length="0.4" radius="0.04"/> -->
+  <!--           </geometry> -->
+  <!--           <!-\- <origin rpy="0 1.570796 0" xyz="-0.16 0 0"/> -\-> -->
+  <!--           <!-\- <origin rpy="0 1.570796 0" xyz="0 0 0"/> -\-> -->
+  <!--           <origin rpy="1.570796 0 0" xyz="0 0.2 0"/> -->
+  <!--           <material name="red"> -->
+  <!--               <color rgba="1 0 0 1"/> -->
+  <!--           </material> -->
+  <!--       </visual> -->
+  <!--       <collision> -->
+  <!--           <geometry> -->
+  <!--               <cylinder length="0.4" radius="0.06"/> -->
+  <!--           </geometry> -->
+  <!--           <!-\- <origin rpy="0 1.570796 0" xyz="-0.16 0 0"/> -\-> -->
+  <!--           <!-\- <origin rpy="0 1.570796 0" xyz="0 0 0"/> -\-> -->
+  <!--           <origin rpy="1.570796 0 0" xyz="0 0.2 0"/> -->
+  <!--       </collision> -->
+
+  <!--       <inertial> -->
+  <!--           <mass value="0.1"/> -->
+  <!--           <inertia ixx="1e-2" iyy="1e-2" izz="1e-2" ixy="0" ixz="0" iyz="0"/> -->
+  <!--       </inertial> -->
+  <!--   </link> -->
+
+  <!--   <link name="hand_link"> -->
+  <!--       <visual> -->
+  <!--           <geometry> -->
+  <!--               <cylinder length="0.15" radius="0.04"/> -->
+  <!--           </geometry> -->
+  <!--           <origin rpy="0 0 0" xyz="0 0 0"/> -->
+  <!--           <!-\- <origin rpy="0 0 0" xyz="0 -0.2 0"/> -\-> -->
+  <!--           <material name="red"> -->
+  <!--               <color rgba="1 0 0 1"/> -->
+  <!--           </material> -->
+  <!--       </visual> -->
+  <!--       <collision> -->
+  <!--           <geometry> -->
+  <!--               <cylinder length="0.15" radius="0.04"/> -->
+  <!--           </geometry> -->
+  <!--           <!-\- <origin rpy="0 1.570796 0" xyz="-0.16 0 0"/> -\-> -->
+  <!--           <!-\- <origin rpy="0 1.570796 0" xyz="0 0 0"/> -\-> -->
+  <!--           <origin rpy="0 0 0" xyz="0 0 0"/> -->
+  <!--           <!-\- <contact_coefficients mu="2.0" kp="2.0" kd="2.0" /> -\-> -->
+  <!--           <contact_coefficients mu="0" kp="1000.0" kd="1.0"/> -->
+  <!--       </collision> -->
+
+  <!--       <inertial> -->
+  <!--           <mass value="0.1"/> -->
+  <!--           <inertia ixx="1e-2" iyy="1e-2" izz="1e-2" ixy="0" ixz="0" iyz="0"/> -->
+  <!--       </inertial> -->
+  <!--   </link> -->
 
   <!--To open this model with Gazebo replace the null masses, inertias and dimensions of the 'fake links f1 and f2'-->
   <!--LINKS-->
@@ -1655,6 +1620,20 @@
     <origin xyz="1 1 0.95" rpy="0 0 ${-0.5*pi}" />
   </joint>
 
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <joint name="jRightElbow_rotx">
+      <command_interface name="position">
+        <param name="min">1.79</param>
+        <param name="max">6.28</param>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
   <!-- Sensor  1-->
   <sensor name="Pelvis_gyro" type="gyroscope">
     <parent link="Pelvis"/>
@@ -1806,6 +1785,6 @@
   </sensor>
   <sensor name="LeftFoot_accelerometer" type="accelerometer">
     <parent link="LeftFoot"/>
-    <origin xyz="0.083701  -0.0013929   -0.011817" rpy="-0.10862      0.4501     0.37976"/>
+p    <origin xyz="0.083701  -0.0013929   -0.011817" rpy="-0.10862      0.4501     0.37976"/>
   </sensor>
 </robot>
