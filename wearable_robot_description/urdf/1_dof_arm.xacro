@@ -10,10 +10,10 @@
 
     <joint name="fixed" type="fixed">
         <parent link="world"/>
-        <child link="base_link"/>
+        <child link="arm_link"/>
     </joint>
 
-    <link name="base_link">
+    <link name="arm_link">
         <visual>
             <geometry>
                 <cylinder length="0.3" radius="0.01"/>
@@ -29,16 +29,15 @@
             </geometry>
             <origin rpy="0 0 1.570796" xyz="0.72 1 1.275"/>
         </collision>
-
         <inertial>
-            <mass value="1"/>
+            <mass value="0.5"/>
             <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
         </inertial>
     </link>
 
     <joint name="arm_joint" type="revolute">
-        <parent link="base_link"/>
-        <child link="arm_link"/>
+        <parent link="arm_link"/>
+        <child link="forearm_link"/>
         <origin xyz="0.72 1 1.125"/>
         <axis xyz="0 0 0" />
         <!-- <limit effort="300" velocity="0.1" lower="4.71" upper="1.8"/> -->
@@ -46,7 +45,7 @@
         <dynamics damping="50" friction="1"/>
     </joint>
 
-    <link name="arm_link">
+    <link name="forearm_link">
         <visual>
             <geometry>
                 <cylinder length="0.25" radius="0.01"/>
@@ -62,20 +61,19 @@
             </geometry>
             <origin rpy="1.570796 0 0" xyz="0 0.125 0"/>
         </collision>
-
         <inertial>
-            <mass value="1"/>
+            <mass value="0.5"/>
             <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
         </inertial>
     </link>
 
-    <joint name="hand_link_fix_to_arm_link" type="fixed">
+    <joint name="forearm_band_link_fix_to_forearm_link" type="fixed">
       <origin xyz="0.12 0.18 0.05" rpy="0 1.570796 0"/>
-      <parent link="arm_link"/>
-      <child link="hand_link"/>
+      <parent link="forearm_link"/>
+      <child link="forearm_band_link"/>
     </joint>
 
-    <link name="hand_link">
+    <link name="forearm_band_link">
       <visual>
         <geometry>
           <cylinder length="0.01" radius="0.005"/>
@@ -101,26 +99,42 @@
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
       </collision>
+      <collision>
+        <geometry>
+          <cylinder length="0.05" radius="0.02"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.1 0 0"/>
+        <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
+      </collision>
       <inertial>
         <mass value="0.1"/>
         <inertia ixx="1e-2" iyy="1e-2" izz="1e-2" ixy="0" ixz="0" iyz="0"/>
       </inertial>
     </link>
 
-    <joint name="hand_link_fix_to_base_link" type="fixed">
+    <joint name="arm_band_link_fix_to_arm_link" type="fixed">
       <!-- <origin xyz="0.12 0.19 0.05" rpy="0 1.570796 0"/> -->
       <origin xyz="0.85 0.95 1.25" rpy="0 0 1.570796"/>
       <axis xyz="0 0 0" />
-      <parent link="base_link"/>
-      <child link="hand_1_link"/>
+      <parent link="arm_link"/>
+      <child link="arm_band_link"/>
     </joint>
 
-    <link name="hand_1_link">
+    <link name="arm_band_link">
       <visual>
         <geometry>
           <cylinder length="0.01" radius="0.005"/>
         </geometry>
         <origin rpy="0 0 0" xyz="0.0 0 0"/>
+        <material name="red">
+          <color rgba="1 0 0 1"/>
+        </material>
+      </visual>
+      <visual>
+        <geometry>
+          <cylinder length="0.01" radius="0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.05 0 0.225"/>
         <material name="red">
           <color rgba="1 0 0 1"/>
         </material>
@@ -139,6 +153,20 @@
           <cylinder length="0.05" radius="0.005"/>
         </geometry>
         <origin rpy="0 0 0" xyz="0 0 0"/>
+        <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
+      </collision>
+      <collision>
+        <geometry>
+          <cylinder length="0.05" radius="0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.05 0 0.225"/>
+        <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
+      </collision>
+      <collision>
+        <geometry>
+          <cylinder length="0.05" radius="0.005"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.1 0 0"/>
         <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
       </collision>
       <inertial>

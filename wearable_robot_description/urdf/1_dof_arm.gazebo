@@ -9,11 +9,11 @@
     </plugin>
   </gazebo>
 
-  <gazebo reference="base_link">
+  <gazebo reference="arm_link">
     <material>Gazebo/Black</material>
   </gazebo>
 
-  <gazebo reference="arm_link">
+  <gazebo reference="forearm_link">
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
     <material>Gazebo/Orange</material>
