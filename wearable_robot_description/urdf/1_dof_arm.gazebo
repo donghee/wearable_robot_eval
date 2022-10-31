@@ -19,4 +19,12 @@
     <material>Gazebo/Orange</material>
   </gazebo>
 
+  <gazebo reference="forearm_band_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <gazebo reference="arm_band_link">
+    <material>Gazebo/Red</material>
+  </gazebo>
+
 </robot>
