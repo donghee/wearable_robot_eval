@@ -78,7 +78,7 @@
         <geometry>
           <cylinder length="0.01" radius="0.005"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin rpy="0 0 0" xyz="0.01 0 0"/>
         <material name="red">
           <color rgba="1 0 0 1"/>
         </material>
@@ -87,23 +87,23 @@
         <geometry>
           <cylinder length="0.01" radius="0.005"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0.1 0 0"/>
+        <origin rpy="0 0 0" xyz="0.09 0 0"/>
         <material name="red">
           <color rgba="1 0 0 1"/>
         </material>
       </visual>
       <collision>
         <geometry>
-          <cylinder length="0.05" radius="0.02"/>
+          <cylinder length="0.02" radius="0.005"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin rpy="0 0 0" xyz="0.01 0 0"/>
         <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
       </collision>
       <collision>
         <geometry>
-          <cylinder length="0.05" radius="0.02"/>
+          <cylinder length="0.02" radius="0.005"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0.1 0 0"/>
+        <origin rpy="0 0 0" xyz="0.09 0 0"/>
         <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
       </collision>
       <inertial>
@@ -125,7 +125,7 @@
         <geometry>
           <cylinder length="0.01" radius="0.005"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0.0 0 0"/>
+        <origin rpy="1.570796 0 0" xyz="0.01 0 0"/>
         <material name="red">
           <color rgba="1 0 0 1"/>
         </material>
@@ -134,23 +134,23 @@
         <geometry>
           <cylinder length="0.01" radius="0.005"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0.1 0 0"/>
+        <origin rpy="1.570796 0 0" xyz="0.09 0 0"/>
         <material name="red">
           <color rgba="1 0 0 1"/>
         </material>
       </visual>
       <collision>
         <geometry>
-          <cylinder length="0.05" radius="0.005"/>
+          <cylinder length="0.02" radius="0.005"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <origin rpy="1.570796 0 0" xyz="0.01 0 0"/>
         <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
       </collision>
       <collision>
         <geometry>
-          <cylinder length="0.05" radius="0.005"/>
+          <cylinder length="0.02" radius="0.005"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0.1 0 0"/>
+        <origin rpy="1.570796 0 0" xyz="0.09 0 0"/>
         <contact_coefficients mu="2.0" kp="2.0" kd="2.0" />
       </collision>
       <inertial>
