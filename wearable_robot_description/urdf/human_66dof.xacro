@@ -545,7 +545,7 @@
       <!--box origin wrt jRightWrist-->
       <origin xyz="0   -0.083588           0" rpy="0 0 0" />
       <geometry>
-        <box size="0.11145     0.16718    0.039266"/>
+      <!--  <box size="0.11145     0.16718    0.039266"/> -->
       </geometry>
       <!-- <contact_coefficients mu="2.0" kp="2.0" kd="2.0" /> -->
       <contact_coefficients mu="0" kp="1000.0" kd="1.0"/>
@@ -1284,7 +1284,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 0 1" />
   </joint>
-  <joint name="jRightWrist_rotx" type="revolute">
+  <joint name="jRightWrist_rotx" type="fixed">
     <origin xyz="7.7e-05    -0.22247           0" rpy="0 0 0"/>
     <parent link="RightForeArm"/>
     <child link="RightHand_f1"/>
@@ -1292,7 +1292,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="1 0 0" />
   </joint>
-  <joint name="jRightWrist_roty" type="revolute">
+  <joint name="jRightWrist_roty" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="RightHand_f1"/>
     <child link="RightHand_f2"/>
@@ -1300,7 +1300,7 @@
     <limit effort="30" velocity="1.0" lower="-10.0" upper="10.0" />
     <axis xyz="0 1 0" />
   </joint>
-  <joint name="jRightWrist_rotz" type="revolute">
+  <joint name="jRightWrist_rotz" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0"/>
     <parent link="RightHand_f2"/>
     <child link="RightHand"/>
