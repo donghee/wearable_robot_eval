@@ -28,10 +28,11 @@ Required ROS packages
 ```
 sudo apt install ros-foxy-gazebo-dev ros-foxy-gazebo-plugins ros-foxy-gazebo-msgs ros-foxy-gazebo-ros-pkgs ros-foxy-gazebo-ros ros-foxy-ros-core ros-foxy-geometry2
 sudo apt install ros-foxy-joint-state-publisher-gui ros-foxy-xacro
-sudo apt install ros-foxy-gazebo-ros2-control ros-foxy-ros2-controllers ros-foxy-controller-manager ros-foxy-gazebo-ros2-control ros-ros-foxy-ros2-controllers
+sudo apt install ros-foxy-gazebo-ros2-control ros-foxy-ros2-controllers ros-foxy-controller-manager ros-foxy-gazebo-ros2-control ros-foxy-ros2-controllers
 ```
 
 Run robot in Gazebo
+
 ```
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
@@ -41,7 +42,7 @@ colcon build
 source ./install/setup.bash
 
 ros2 launch wearable_robot_gazebo 1_dof_arm.launch.py
-# or 
+# or
 ros2 launch wearable_robot_gazebo eduexo.launch.py
 ```
 
