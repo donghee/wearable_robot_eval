@@ -46,6 +46,7 @@ install(
 install(
   PROGRAMS
   launch/spawn_entity.py
+  launch/spawn_entity_v2.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
