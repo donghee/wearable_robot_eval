@@ -9,6 +9,50 @@
     <include>
       <uri>model://ground_plane</uri>
     </include>
+    <model name="box">
+      <pose>0 0 0.5 0 0 0</pose>
+      <link name="link">
+        <collision name="collision">
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <!-- <mu>1.00</mu> -->
+                <!-- <mu2>1.00</mu2> -->
+                <mu>0.08</mu>
+                <mu2>0.08</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>1</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+          </surface>
+        </collision>
+
+        <visual name="visual">
+          <geometry>
+            <box>
+              <size>1 1 1</size>
+            </box>
+          </geometry>
+        </visual>
+      </link>
+
+      <plugin name="wearable_robot_controller" filename="libwearable_robot_controller_plugin.so"/>
+    </model>
 
   </world>
 </sdf>

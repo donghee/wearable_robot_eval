@@ -21,6 +21,13 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 
+# wearable robot controller plugin
+find_package(ament_cmake_auto REQUIRED)
+ament_auto_find_build_dependencies()
+link_directories(${gazebo_dev_LIBRARY_DIRS})
+ament_auto_add_library(wearable_robot_controller_plugin SHARED
+                       src/wearable_robot_controller_plugin.cpp)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -35,9 +42,10 @@ endif()
 install(
   DIRECTORY
     launch
+    models
     worlds
   DESTINATION
     share/${PROJECT_NAME}/
 )
 
-ament_package()
+ament_auto_package()
