@@ -51,7 +51,9 @@
         </visual>
       </link>
 
-      <plugin name="wearable_robot_controller" filename="libwearable_robot_controller_plugin.so"/>
+      <plugin name="wearable_robot_controller" filename="libwearable_robot_controller_plugin.so">
+        <force>0.8 0 0</force>
+      </plugin>
     </model>
 
   </world>
