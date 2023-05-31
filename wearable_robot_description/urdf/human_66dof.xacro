@@ -545,7 +545,7 @@
       <!--box origin wrt jRightWrist-->
       <origin xyz="0   -0.083588           0" rpy="0 0 0" />
       <geometry>
-      <!--  <box size="0.11145     0.16718    0.039266"/> -->
+        <box size="0.11145     0.16718    0.039266"/>
       </geometry>
       <!-- <contact_coefficients mu="2.0" kp="2.0" kd="2.0" /> -->
       <contact_coefficients mu="0" kp="1000.0" kd="1.0"/>
@@ -1785,10 +1785,10 @@
   </sensor>
   <sensor name="LeftFoot_accelerometer" type="accelerometer">
     <parent link="LeftFoot"/>
-p    <origin xyz="0.083701  -0.0013929   -0.011817" rpy="-0.10862      0.4501     0.37976"/>
+    <origin xyz="0.083701  -0.0013929   -0.011817" rpy="-0.10862      0.4501     0.37976"/>
   </sensor>
-    <gazebo reference="RightUpperArm">
-	    <mu1>1.0</mu1>
-	    <mu2>1.0</mu2>
-	  </gazebo>
+  <gazebo reference="RightUpperArm">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+  </gazebo>
 </robot>
