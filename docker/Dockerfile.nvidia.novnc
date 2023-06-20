@@ -132,7 +132,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   ros-foxy-controller-manager \
   ros-foxy-gazebo-ros2-control \
   ros-foxy-ros2-controllers \
-  tilix \
   tmux \
   vim
 
@@ -147,6 +146,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     supervisor \
     lxde-core \
     tilix \
+    terminator \
     mesa-utils \
     libglu1 \
     libsm6 \
@@ -159,6 +159,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xkb-data \
     lxde \
     nginx \ 
+    htop \
+    gedit \
+    firefox \
+    fonts-noto-cjk \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -191,6 +195,58 @@ RUN git clone https://github.com/novnc/websockify
 RUN mkdir -p /root/.vnc
 COPY websockify-token.cfg /root/.vnc/
  
+# desktop
+RUN mkdir -p /root/Desktop
+COPY ./firefox.desktop_applications /usr/share/applications/firefox.desktop
+COPY ./terminator.desktop /root/Desktop
+RUN mkdir -p /root/.config/terminator
+#COPY ./terminator_config /root/.config/terminator/config
+COPY ./firefox.desktop /root/Desktop
+COPY ./htop.desktop /root/Desktop
+COPY ./gedit.desktop /root/Desktop
+COPY ./background.png /root/Desktop
+
+# GTK 2 and 3 settings for icons and style, wallpaper
+RUN echo '\n\
+gtk-theme-name="Raleigh"\n\
+gtk-icon-theme-name="nuoveXT2"\n\
+' > /etc/skel/.gtkrc-2.0 && \
+\
+mkdir -p /root/.config/gtk-3.0 && \
+echo '\n\
+[Settings]\n\
+gtk-theme-name="Raleigh"\n\
+gtk-icon-theme-name="nuoveXT2"\n\
+' > /root/.config/gtk-3.0/settings.ini && \
+\
+mkdir -p /root/.config/pcmanfm/LXDE && \
+echo '\n\
+[*]\n\
+wallpaper_mode=stretch\n\
+wallpaper_common=1\n\
+wallpaper=/root/Desktop/background.png\n\
+' > /root/.config/pcmanfm/LXDE/desktop-items-0.conf && \
+\
+mkdir -p /root/.config/libfm && \
+echo '\n\
+[config]\n\
+quick_exec=1\n\
+terminal=lxterminal\n\
+' > /root/.config/libfm/libfm.conf && \
+\
+mkdir -p /root/.config/openbox/ && \
+echo '<?xml version="1.0" encoding="UTF-8"?>\n\
+<theme>\n\
+  <name>Natura</name>\n\
+</theme>\n\
+' > /root/.config/openbox/lxde-rc.xml && \
+\
+mkdir -p /etc/skel/.config/ && \
+echo '[Added Associations]\n\
+text/plain=mousepad.desktop;\n\
+' > /etc/skel/.config/mimeapps.list
+
+
 # nginx
 COPY nginx.conf /etc/nginx/sites-available/default
 #RUN systemctl restart nginx 
