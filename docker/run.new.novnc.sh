@@ -6,7 +6,7 @@ VNC_PORT=$((5900 + $ID))
 
 docker run -it \
     --gpus all \
-    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    --volume="/tmp/.X11-unix/X0:/tmp/.X11-unix/X0:rw" \
     --rm \
     -p $NOVNC_PORT:6080 \
     -p $VNC_PORT:$VNC_PORT \

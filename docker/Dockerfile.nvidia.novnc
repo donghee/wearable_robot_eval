@@ -164,6 +164,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gedit \
     firefox \
     fonts-noto-cjk \
+    arc-theme \
+    papirus-icon-theme \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -215,15 +217,15 @@ RUN perl -pi -e 's/^Exec=terminator$/Exec=terminator -e "vglrun bash"/g' /usr/sh
 
 # GTK 2 and 3 settings for icons and style, wallpaper
 RUN echo '\n\
-gtk-theme-name="Raleigh"\n\
-gtk-icon-theme-name="nuoveXT2"\n\
+gtk-theme-name="Arc-Darker"\n\
+gtk-icon-theme-name="Papirus"\n\
 ' > /etc/skel/.gtkrc-2.0 && \
 \
 mkdir -p /root/.config/gtk-3.0 && \
 echo '\n\
 [Settings]\n\
-gtk-theme-name="Raleigh"\n\
-gtk-icon-theme-name="nuoveXT2"\n\
+gtk-theme-name="Arc-Darker"\n\
+gtk-icon-theme-name="Papirus"\n\
 ' > /root/.config/gtk-3.0/settings.ini && \
 \
 mkdir -p /root/.config/pcmanfm/LXDE && \
@@ -244,15 +246,26 @@ terminal=lxterminal\n\
 mkdir -p /root/.config/openbox/ && \
 echo '<?xml version="1.0" encoding="UTF-8"?>\n\
 <theme>\n\
-  <name>Natura</name>\n\
+  <name>Arc-Darker</name>\n\
 </theme>\n\
 ' > /root/.config/openbox/lxde-rc.xml && \
 \
+mkdir -p /root/.config/lxsession/LXDE/ && \
+echo '[Session]\n\
+window_manager=openbox-lxde\n\
+[GTK]\n\
+sNet/ThemeName=Arc-Darker\n\
+sNet/IconThemeName=Papirus\n\
+' > /root/.config/lxsession/LXDE/desktop.conf && \
 mkdir -p /etc/skel/.config/ && \
 echo '[Added Associations]\n\
 text/plain=mousepad.desktop;\n\
 ' > /etc/skel/.config/mimeapps.list
+# /etc/xdg/openbox/rc.xml Clearlooks -> Arc-Darker
 
+RUN sed -i "s/Clearlooks/Arc-Darker/g" /etc/xdg/openbox/rc.xml
+RUN mkdir -p /root/.config/lxpanel/LXDE/panels/
+COPY ./panel /root/.config/lxpanel/LXDE/panels/
 
 # nginx
 COPY nginx.conf /etc/nginx/sites-available/default
