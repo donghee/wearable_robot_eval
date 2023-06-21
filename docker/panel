@@ -14,7 +14,7 @@ Global {
   autohide=0
   heightwhenhidden=1
   setdocktype=1
-  setpartialstrut=0
+  setpartialstrut=1
   usefontcolor=0
   fontsize=12
   fontcolor=#ffffff
