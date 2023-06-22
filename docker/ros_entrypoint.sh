@@ -3,6 +3,7 @@ set -e
 
 # setup ros2 environment
 source "/opt/ros/$ROS_DISTRO/setup.bash" --
+echo "source /opt/ros/$ROS_DISTRO/setup.bash" >> ~/.bashrc
 
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
