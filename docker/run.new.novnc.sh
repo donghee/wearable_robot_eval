@@ -12,4 +12,4 @@ docker run -it \
     -p $VNC_PORT:$VNC_PORT \
     --workdir="/root" \
     ghcr.io/donghee/wearable_robot_eval:foxy_nvidia_novnc \
-    bash -c "TVNC_VGL=1 /opt/TurboVNC/bin/vncserver -wm LXDE -SecurityTypes None :$ID && /opt/noVNC/utils/websockify/run --verbose --web=/opt/noVNC/ 6080 127.0.0.1:$VNC_PORT"
+    bash -c "/opt/TurboVNC/bin/vncserver -wm LXDE -SecurityTypes None :$ID && /opt/noVNC/utils/websockify/run --verbose --web=/opt/noVNC/ 6080 127.0.0.1:$VNC_PORT"
