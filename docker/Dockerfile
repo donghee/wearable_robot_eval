@@ -51,5 +51,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 WORKDIR $HOME
 
 COPY ./ros_entrypoint.sh /
+COPY ./bootstrap.sh /
 
 ENTRYPOINT ["/ros_entrypoint.sh"]

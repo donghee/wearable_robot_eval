@@ -15,10 +15,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# configure timezone
+# Configure timezone
 RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo "Asia/Seoul" > /etc/timezone
  
-# configure locale
+# Configure locale
 RUN export LANGUAGE=ko_KR.UTF-8; export LANG=ko_KR.UTF-8; export LC_ALL=ko_KR.UTF-8; locale-gen ko_KR.UTF-8; DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 RUN echo "LANG=ko_KR.UTF-8" > /etc/default/locale
 RUN echo "LANGUAGE=ko_KR.UTF-8" >> /etc/default/locale
@@ -47,9 +47,6 @@ ENV NVIDIA_DRIVER_CAPABILITIES \
 
 RUN echo "/usr/local/nvidia/lib" >> /etc/ld.so.conf.d/nvidia.conf && \
     echo "/usr/local/nvidia/lib64" >> /etc/ld.so.conf.d/nvidia.conf
-
-# https://gitlab.com/nvidia/container-images/opengl/-/blob/ubuntu20.04/NGC-DL-CONTAINER-LICENSE
-#COPY nvidia_opengl_ubuntu22/NGC-DL-CONTAINER-LICENSE /
 
 # Required for non-glvnd setups.
 ENV LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu:/usr/lib/i386-linux-gnu${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}:/usr/local/nvidia/lib:/usr/local/nvidia/lib64
@@ -87,12 +84,12 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
    && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
-    ros-foxy-desktop \
+    ros-${ROS_DISTRO}-desktop \
     python3-argcomplete \
     ros-dev-tools \ 
    && rm -rf /var/lib/apt/lists/*
 
-# install python packages
+# Install python packages
 RUN pip3 install -U \
     argcomplete \
     flake8 \
@@ -124,25 +121,24 @@ RUN colcon mixin add default \
     colcon metadata update
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
-  ros-foxy-gazebo-dev \
-  ros-foxy-gazebo-plugins \
-  ros-foxy-gazebo-msgs \
-  ros-foxy-gazebo-ros-pkgs \
-  ros-foxy-gazebo-ros \
-  ros-foxy-ros-core \
-  ros-foxy-geometry2 \
-  ros-foxy-joint-state-publisher-gui \
-  ros-foxy-xacro \
-  ros-foxy-gazebo-ros2-control \
-  ros-foxy-ros2-controllers \
-  ros-foxy-controller-manager \
-  ros-foxy-gazebo-ros2-control \
-  ros-foxy-ros2-controllers \
-  tilix \
+  ros-${ROS_DISTRO}-gazebo-dev \
+  ros-${ROS_DISTRO}-gazebo-plugins \
+  ros-${ROS_DISTRO}-gazebo-msgs \
+  ros-${ROS_DISTRO}-gazebo-ros-pkgs \
+  ros-${ROS_DISTRO}-gazebo-ros \
+  ros-${ROS_DISTRO}-ros-core \
+  ros-${ROS_DISTRO}-geometry2 \
+  ros-${ROS_DISTRO}-joint-state-publisher-gui \
+  ros-${ROS_DISTRO}-xacro \
+  ros-${ROS_DISTRO}-gazebo-ros2-control \
+  ros-${ROS_DISTRO}-ros2-controllers \
+  ros-${ROS_DISTRO}-controller-manager \
+  ros-${ROS_DISTRO}-gazebo-ros2-control \
+  ros-${ROS_DISTRO}-ros2-controllers \
   tmux \
   vim
 
-# FIXME: provide fix for theese root-need
+# FIXME: provide fix for these root-need
 RUN apt-get update && apt-get install --no-install-recommends -y \
     apt-rdepends \
     && rm -rf /var/lib/apt/lists/*

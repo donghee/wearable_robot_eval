@@ -1,12 +1,28 @@
 #!/bin/sh
 
+usage()
+{
+  echo "Usage: ./`basename $0` 1~8"
+  exit $1
+}
+
+if [ $# -eq 0 ]
+then
+  usage 0
+fi
+
+
+ID=$@
+NOVNC_PORT=$((8080 + $ID))
+VNC_PORT=$((5900 + $ID))
+
 docker run -it \
     --gpus all \
-    --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+    --privileged \
+    --volume="/tmp/.X11-unix/X0:/tmp/.X11-unix/X0:rw" \
     --rm \
-    -p 80:6080 \
+    -p $NOVNC_PORT:6080 \
+    -p $VNC_PORT:$VNC_PORT \
     --workdir="/root" \
     ghcr.io/donghee/wearable_robot_eval:foxy_nvidia_novnc \
-    bash -c "TVNC_VGL=1 /opt/TurboVNC/bin/vncserver -wm LXDE -SecurityTypes None :1 && /opt/noVNC/utils/websockify/run --verbose --web=/opt/noVNC/ 6080 127.0.0.1:5901"
-    #bash -c "TVNC_VGL=1 /opt/TurboVNC/bin/vncserver -wm LXDE -SecurityTypes None :1 && /opt/noVNC/utils/websockify/run --verbose --web=/opt/noVNC/ --token-plugin=TokenFile --token-source=/root/.vnc/websockify-token.cfg 6080"
-    #bash -c "/root/ros2_ws/src/wearable_robot_eval/docker/novnc.sh"
+    bash -c "/bootstrap.sh && /opt/TurboVNC/bin/vncserver -wm LXDE -SecurityTypes None :$ID && /opt/noVNC/utils/websockify/run --verbose --web=/opt/noVNC/ 6080 127.0.0.1:$VNC_PORT"
