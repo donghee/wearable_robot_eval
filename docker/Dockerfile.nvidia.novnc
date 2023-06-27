@@ -274,5 +274,6 @@ COPY nginx.conf /etc/nginx/sites-available/default
 WORKDIR $HOME
 
 COPY ./ros_entrypoint.sh /
+COPY ./bootstrap.sh /
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
