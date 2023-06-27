@@ -205,6 +205,7 @@ COPY xorg.conf /etc/X11/xorg.conf
 
 RUN mv /etc/xdg/autostart/light-locker.desktop /etc/xdg/autostart/light-locker.desktop_bak
 RUN mv /etc/xdg/autostart/xfce4-power-manager.desktop /etc/xdg/autostart/xfce4-power-manager.desktop_bak
+RUN mv /usr/bin/lxpolkit /usr/bin/lxpolkit_bak
  
 # desktop
 RUN mkdir -p /root/Desktop
