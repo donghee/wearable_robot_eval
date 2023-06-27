@@ -4,10 +4,12 @@ ID=9
 NOVNC_PORT=$((8080 + $ID))
 VNC_PORT=$((5900 + $ID))
 
-docker run -it \
+#docker run -it \
+docker run \
     --gpus all \
+    --privileged  \
     --volume="/tmp/.X11-unix/X0:/tmp/.X11-unix/X0:rw" \
-    --volume="$HOME/ros2_ws:/root/dev_ws:rw" \
+    --volume="$HOME/ros2_ws:/root/ros2_ws:rw" \
     --volume="$HOME/.ssh:/root/.ssh:ro" \
     --rm \
     -p 80:6080 \
