@@ -169,7 +169,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-noto-cjk \
     arc-theme \
     papirus-icon-theme \
-    uim uim-xim uim-byeoru uim-gtk2.0 \
+    uim uim-xim uim-byeoru uim-gtk3 \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 

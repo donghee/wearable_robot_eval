@@ -68,13 +68,7 @@ Plugin {
       id=pcmanfm.desktop
     }
     Button {
-      id=lxterminal.desktop
-    }
-    Button {
-      id=wolfram-mathematica.desktop
-    }
-    Button {
-      id=wolfram-language.desktop
+      id=terminator.desktop
     }
   }
 }
@@ -106,49 +100,16 @@ Plugin {
   }
 }
 Plugin {
-  type=tray
-  Config {
-  }
-}
-Plugin {
-  type=bluetooth
-  Config {
-  }
-}
-Plugin {
-  type=space
-  Config {
-    Size=2
-  }
-}
-Plugin {
-  type=dhcpcdui
-  Config {
-  }
-}
-Plugin {
-  type=space
-  Config {
-    Size=2
-  }
-}
-Plugin {
-  type=volumealsa
-  Config {
-  }
-}
-Plugin {
-  type=space
-  Config {
-    Size=2
-  }
-}
-Plugin {
   type=cpu
   Config {
     ShowPercent=1
     Foreground=#a9a9a9a9a9a9
     Background=#d3d3d3d3d3d3
+  }
+}
+Plugin {
+  type=tray
+  Config {
   }
 }
 Plugin {
