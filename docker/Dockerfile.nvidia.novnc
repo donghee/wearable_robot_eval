@@ -169,6 +169,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     fonts-noto-cjk \
     arc-theme \
     papirus-icon-theme \
+    uim uim-xim uim-byeoru uim-gtk2.0 \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
@@ -199,9 +200,9 @@ RUN git clone https://github.com/novnc/noVNC.git
 WORKDIR /opt/noVNC/utils/
 RUN git clone https://github.com/novnc/websockify
 RUN mkdir -p /root/.vnc
-COPY websockify-token.cfg /root/.vnc/
+COPY files/websockify-token.cfg /root/.vnc/
 
-COPY xorg.conf /etc/X11/xorg.conf
+COPY files/xorg.conf /etc/X11/xorg.conf
 
 RUN mv /etc/xdg/autostart/light-locker.desktop /etc/xdg/autostart/light-locker.desktop_bak
 RUN mv /etc/xdg/autostart/xfce4-power-manager.desktop /etc/xdg/autostart/xfce4-power-manager.desktop_bak
@@ -209,15 +210,23 @@ RUN mv /usr/bin/lxpolkit /usr/bin/lxpolkit_bak
  
 # desktop
 RUN mkdir -p /root/Desktop
-COPY ./firefox.desktop_applications /usr/share/applications/firefox.desktop
-COPY ./terminator.desktop /root/Desktop
+COPY files/firefox.desktop_applications /usr/share/applications/firefox.desktop
+COPY files/terminator.desktop /root/Desktop
 RUN mkdir -p /root/.config/terminator
 #COPY ./terminator_config /root/.config/terminator/config
-COPY ./firefox.desktop /root/Desktop
-COPY ./htop.desktop /root/Desktop
-COPY ./gedit.desktop /root/Desktop
-COPY ./background.png /root/Desktop
+COPY files/firefox.desktop /root/Desktop
+COPY files/htop.desktop /root/Desktop
+COPY files/gedit.desktop /root/Desktop
+COPY files/background.png /root/Desktop
 RUN perl -pi -e 's/^Exec=terminator$/Exec=terminator -e "vglrun bash"/g' /usr/share/applications/terminator.desktop
+
+# xim
+ENV GTK_IM_MODULE uim
+ENV QT_IM_MODULE uim
+ENV XMODIFIERS @im=uim
+RUN locale-gen ko_KR.UTF-8; DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+RUN mkdir -p /root/.config/lxsession/LXDE
+COPY files/autostart /root/.config/lxsession/LXDE
 
 # GTK 2 and 3 settings for icons and style, wallpaper
 RUN echo '\n\
@@ -269,10 +278,10 @@ text/plain=mousepad.desktop;\n\
 # /etc/xdg/openbox/rc.xml Clearlooks -> Arc-Darker
 RUN sed -i "s/Clearlooks/Arc-Darker/g" /etc/xdg/openbox/rc.xml
 RUN mkdir -p /root/.config/lxpanel/LXDE/panels/
-COPY ./panel /root/.config/lxpanel/LXDE/panels/
+COPY files/panel /root/.config/lxpanel/LXDE/panels/
 
 # nginx
-COPY nginx.conf /etc/nginx/sites-available/default
+COPY files/nginx.conf /etc/nginx/sites-available/default
 #RUN systemctl restart nginx 
 
 WORKDIR $HOME
