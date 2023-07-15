@@ -13,13 +13,14 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     dirmngr \
     gpg-agent \
     curl \
+    yadm \
     && rm -rf /var/lib/apt/lists/*
 
 # Configure timezone
 RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo "Asia/Seoul" > /etc/timezone
  
 # Configure locale
-#RUN export LANGUAGE=ko_KR.UTF-8; export LANG=ko_KR.UTF-8; export LC_ALL=ko_KR.UTF-8; locale-gen ko_KR.UTF-8; DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
+RUN export LANGUAGE=ko_KR.UTF-8; export LANG=ko_KR.UTF-8; export LC_ALL=ko_KR.UTF-8; locale-gen ko_KR.UTF-8; DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 #RUN echo "LANG=ko_KR.UTF-8" > /etc/default/locale
 #RUN echo "LANGUAGE=ko_KR.UTF-8" >> /etc/default/locale
 #RUN echo "LC_ALL=ko_KR.UTF-8" >> /etc/default/locale
@@ -144,7 +145,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && rm -rf /var/lib/apt/lists/*
 
 # turbovnc
-#ENV DISPLAY :1
 RUN apt-get update && apt-get install -y --no-install-recommends \
     supervisor \
     lxde-core \
@@ -199,8 +199,8 @@ WORKDIR /opt/
 RUN git clone https://github.com/novnc/noVNC.git
 WORKDIR /opt/noVNC/utils/
 RUN git clone https://github.com/novnc/websockify
-RUN mkdir -p /root/.vnc
-COPY files/websockify-token.cfg /root/.vnc/
+#RUN mkdir -p $HOME/.vnc
+#COPY files/websockify-token.cfg $HOME/.vnc/
 
 COPY files/xorg.conf /etc/X11/xorg.conf
 
@@ -208,83 +208,100 @@ RUN mv /etc/xdg/autostart/light-locker.desktop /etc/xdg/autostart/light-locker.d
 RUN mv /etc/xdg/autostart/xfce4-power-manager.desktop /etc/xdg/autostart/xfce4-power-manager.desktop_bak
 RUN mv /usr/bin/lxpolkit /usr/bin/lxpolkit_bak
  
+# Add user to share files and folder without root permissions
+ENV GROUP_ID=1000
+ENV USER_ID=1000
+ARG USER=root
+ARG HOME=/root
+
+RUN if [ "$USER" != "root" ]; then \
+ addgroup --gid $GROUP_ID $USER && adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID $USER \
+ && echo "vglusers:x:1001:${USER}" >> /etc/group \
+ && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers; \
+fi
+
+WORKDIR $HOME
+USER $USER
+
+# Use --build-arg CACHEBUST=$(date +%s) to force this layer to re-run
+ARG CACHEBUST=1
+
 # desktop
-RUN mkdir -p /root/Desktop
-COPY files/firefox.desktop_applications /usr/share/applications/firefox.desktop
-COPY files/terminator.desktop /root/Desktop
-RUN mkdir -p /root/.config/terminator
-#COPY ./terminator_config /root/.config/terminator/config
-COPY files/firefox.desktop /root/Desktop
-COPY files/htop.desktop /root/Desktop
-COPY files/gedit.desktop /root/Desktop
-COPY files/background.png /root/Desktop
-RUN perl -pi -e 's/^Exec=terminator$/Exec=terminator -e "vglrun bash"/g' /usr/share/applications/terminator.desktop
+RUN mkdir -p $HOME/Desktop
+#COPY files/firefox.desktop_applications /usr/share/applications/firefox.desktop
+COPY files/terminator.desktop $HOME/Desktop
+RUN mkdir -p $HOME/.config/terminator
+COPY files/firefox.desktop $HOME/Desktop
+COPY files/htop.desktop $HOME/Desktop
+COPY files/gedit.desktop $HOME/Desktop
+COPY files/background.png /tmp
+RUN sudo perl -pi -e 's/^Exec=terminator$/Exec=terminator -e "vglrun bash"/g' /usr/share/applications/terminator.desktop
 
 # xim
 ENV GTK_IM_MODULE uim
 ENV QT_IM_MODULE uim
 ENV XMODIFIERS @im=uim
-RUN locale-gen ko_KR.UTF-8; DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
-RUN mkdir -p /root/.config/lxsession/LXDE
-COPY files/autostart /root/.config/lxsession/LXDE
+RUN mkdir -p $HOME/.config/lxsession/LXDE
+COPY files/autostart $HOME/.config/lxsession/LXDE
 
 # GTK 2 and 3 settings for icons and style, wallpaper
 RUN echo '\n\
 gtk-theme-name="Arc-Darker"\n\
 gtk-icon-theme-name="Papirus"\n\
-' > /etc/skel/.gtkrc-2.0 && \
+' > $HOME/.config/.gtkrc-2.0 && \
 \
-mkdir -p /root/.config/gtk-3.0 && \
+mkdir -p $HOME/.config/gtk-3.0 && \
 echo '\n\
 [Settings]\n\
 gtk-theme-name="Arc-Darker"\n\
 gtk-icon-theme-name="Papirus"\n\
-' > /root/.config/gtk-3.0/settings.ini && \
+' > $HOME/.config/gtk-3.0/settings.ini && \
 \
-mkdir -p /root/.config/pcmanfm/LXDE && \
+mkdir -p $HOME/.config/pcmanfm/LXDE && \
 echo '\n\
 [*]\n\
 wallpaper_mode=stretch\n\
 wallpaper_common=1\n\
-wallpaper=/root/Desktop/background.png\n\
-' > /root/.config/pcmanfm/LXDE/desktop-items-0.conf && \
+wallpaper=/tmp/background.png\n\
+' > $HOME/.config/pcmanfm/LXDE/desktop-items-0.conf && \
 \
-mkdir -p /root/.config/libfm && \
+mkdir -p $HOME/.config/libfm && \
 echo '\n\
 [config]\n\
 quick_exec=1\n\
 terminal=lxterminal\n\
-' > /root/.config/libfm/libfm.conf && \
+' > $HOME/.config/libfm/libfm.conf && \
 \
-mkdir -p /root/.config/openbox/ && \
+mkdir -p $HOME/.config/openbox/ && \
 echo '<?xml version="1.0" encoding="UTF-8"?>\n\
 <theme>\n\
   <name>Arc-Darker</name>\n\
 </theme>\n\
-' > /root/.config/openbox/lxde-rc.xml && \
+' > $HOME/.config/openbox/lxde-rc.xml && \
 \
-mkdir -p /root/.config/lxsession/LXDE/ && \
+mkdir -p $HOME/.config/lxsession/LXDE/ && \
 echo '[Session]\n\
 window_manager=openbox-lxde\n\
 [GTK]\n\
 sNet/ThemeName=Arc-Darker\n\
 sNet/IconThemeName=Papirus\n\
-' > /root/.config/lxsession/LXDE/desktop.conf && \
-mkdir -p /etc/skel/.config/ && \
-echo '[Added Associations]\n\
-text/plain=mousepad.desktop;\n\
-' > /etc/skel/.config/mimeapps.list
+' > $HOME/.config/lxsession/LXDE/desktop.conf 
+#' > $HOME/.config/lxsession/LXDE/desktop.conf && \
+#mkdir -p /etc/skel/.config/ && \
+#echo '[Added Associations]\n\
+#text/plain=mousepad.desktop;\n\
+#' > /etc/skel/.config/mimeapps.list
 
 # /etc/xdg/openbox/rc.xml Clearlooks -> Arc-Darker
-RUN sed -i "s/Clearlooks/Arc-Darker/g" /etc/xdg/openbox/rc.xml
-RUN mkdir -p /root/.config/lxpanel/LXDE/panels/
-COPY files/panel /root/.config/lxpanel/LXDE/panels/
+RUN sudo sed -i "s/Clearlooks/Arc-Darker/g" /etc/xdg/openbox/rc.xml
+RUN mkdir -p $HOME/.config/lxpanel/LXDE/panels/
+COPY files/panel $HOME/.config/lxpanel/LXDE/panels/
 
 # nginx
-COPY files/nginx.conf /etc/nginx/sites-available/default
+#COPY files/nginx.conf /etc/nginx/sites-available/default
 #RUN systemctl restart nginx 
 
-WORKDIR $HOME
+RUN sudo chown -R $USER:$USER $HOME
 
 COPY ./ros_entrypoint.sh /
 COPY ./bootstrap.sh /
