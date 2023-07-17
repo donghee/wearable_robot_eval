@@ -8,16 +8,14 @@
       <parameters>$(find wearable_robot_description)/config/1_dof_arm_controllers.yaml</parameters>
     </plugin>
   </gazebo>
-  
-  <!--
+ 
   <gazebo>
     <plugin name="wearable_robot_controller" filename="libwearable_robot_controller_plugin.so">
-      <force>0.01 0 0</force>
-      <link>arm_band_point_1</link>
+      <force>-1.0 0 0</force>
+      <link>arm_link</link>
     </plugin>
   </gazebo>
-  -->
-
+ 
   <gazebo reference="arm_link">
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
