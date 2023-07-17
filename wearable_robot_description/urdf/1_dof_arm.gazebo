@@ -24,12 +24,12 @@
   <gazebo reference="forearm_band_link">
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
-    <material>Gazebo/Red</material>
+    <material>Gazebo/Blue</material>
   </gazebo>
 
   <gazebo reference="arm_band_link">
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
+    <mu1>Inf</mu1>
+    <mu2>Inf</mu2>
     <material>Gazebo/Red</material>
   </gazebo>
 
