@@ -1788,7 +1788,7 @@
     <origin xyz="0.083701  -0.0013929   -0.011817" rpy="-0.10862      0.4501     0.37976"/>
   </sensor>
   <gazebo reference="RightUpperArm">
-    <mu1>1.0</mu1>
-    <mu2>1.0</mu2>
+    <mu1>Inf</mu1>
+    <mu2>Inf</mu2>
   </gazebo>
 </robot>

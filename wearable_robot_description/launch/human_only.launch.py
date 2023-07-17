@@ -15,7 +15,7 @@ def generate_launch_description():
     pkg_wearable_robot_path = get_package_share_path('wearable_robot_description')
 
     #one_dof_arm_model_path = pkg_wearable_robot_path / 'urdf/1_dof_arm.xacro'
-    default_model_path = pkg_wearable_robot_path / 'urdf/human_45dof.xacro'
+    default_model_path = pkg_wearable_robot_path / 'urdf/human_66dof.xacro'
     default_rviz_config_path = pkg_wearable_robot_path / 'rviz/urdf.rviz'
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
