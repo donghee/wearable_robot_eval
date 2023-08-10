@@ -21,13 +21,13 @@ RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo "Asia/Seoul" >
  
 # Configure locale
 RUN export LANGUAGE=ko_KR.UTF-8; export LANG=ko_KR.UTF-8; export LC_ALL=ko_KR.UTF-8; locale-gen ko_KR.UTF-8; DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
-#RUN echo "LANG=ko_KR.UTF-8" > /etc/default/locale
-#RUN echo "LANGUAGE=ko_KR.UTF-8" >> /etc/default/locale
-#RUN echo "LC_ALL=ko_KR.UTF-8" >> /etc/default/locale
+RUN echo "LANG=ko_KR.UTF-8" > /etc/default/locale
+RUN echo "LANGUAGE=ko_KR.UTF-8" >> /etc/default/locale
+RUN echo "LC_ALL=ko_KR.UTF-8" >> /etc/default/locale
 
-#ENV LANG ko_KR.UTF-8 
-#ENV LANGUAGE ko_KR.UTF-8
-#ENV LC_ALL ko_KR.UTF-8
+ENV LANG ko_KR.UTF-8 
+ENV LANGUAGE ko_KR.UTF-8
+ENV LC_ALL ko_KR.UTF-8
 
 # nvidia opengl
 RUN dpkg --add-architecture i386 \
@@ -157,6 +157,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libegl1-mesa \
     x11-xkb-utils \
     xauth \
+    python3-numpy \
     xfonts-base \
     xkb-data \
     lxde \
@@ -180,7 +181,7 @@ ARG LIBJPEG_VERSION=2.1.5.1
 RUN cd /tmp && \
     curl -O https://nchc.dl.sourceforge.net/project/turbovnc/${TURBOVNC_VERSION}/turbovnc_${TURBOVNC_VERSION}_amd64.deb
 RUN cd /tmp && \
-    curl -O https://nchc.dl.sourceforge.net/project/libjpeg-turbo/${LIBJPEG_VERSION}/libjpeg-turbo-official_${LIBJPEG_VERSION}_amd64.deb
+    curl -L -O https://nchc.dl.sourceforge.net/project/libjpeg-turbo/${LIBJPEG_VERSION}/libjpeg-turbo-official_${LIBJPEG_VERSION}_amd64.deb
 RUN cd /tmp && \
     curl -O https://nchc.dl.sourceforge.net/project/virtualgl/${VIRTUALGL_VERSION}/virtualgl_${VIRTUALGL_VERSION}_amd64.deb
 #RUN cd /tmp && \
