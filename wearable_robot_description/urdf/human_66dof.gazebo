@@ -3,7 +3,12 @@
   <gazebo>
     <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
       <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
+      <ros>
+        <namespace>/human</namespace>
+      </ros>
+      <namespace>/human</namespace>
       <parameters>$(find wearable_robot_description)/config/human.yaml</parameters>
+      <robot_param_node>/human/robot_state_publisher</robot_param_node> 
     </plugin>
   </gazebo>
 
