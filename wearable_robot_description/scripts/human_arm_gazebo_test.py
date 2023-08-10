@@ -16,7 +16,7 @@ class OneDofArmActionClient(Node):
 
     def __init__(self):
         super().__init__('human_right_arm_actionclient')
-        self._action_client = ActionClient(self, FollowJointTrajectory, '/joint_trajectory_controller/follow_joint_trajectory')
+        self._action_client = ActionClient(self, FollowJointTrajectory, '/human/joint_trajectory_controller/follow_joint_trajectory')
 
     def send_goal(self, angle):
         goal_msg = FollowJointTrajectory.Goal()

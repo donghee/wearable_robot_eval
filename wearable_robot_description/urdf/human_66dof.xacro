@@ -2,7 +2,9 @@
 
 <robot name="human" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <!-- <xacro:include filename="$(find wearable_robot_description)/urdf/human_66dof.gazebo"/> -->
+  <!--
+  <xacro:include filename="$(find wearable_robot_description)/urdf/human_66dof.gazebo"/>
+  -->
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find wearable_robot_description)/urdf/materials.xacro"/>
 
