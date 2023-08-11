@@ -35,6 +35,7 @@ endif()
 install(
   DIRECTORY
     launch
+    scripts
     urdf
     rviz
     config
@@ -47,6 +48,7 @@ install(
   PROGRAMS
   launch/spawn_entity.py
   launch/spawn_entity_v2.py
+  scripts/1_dof_arm_gazebo_test.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
