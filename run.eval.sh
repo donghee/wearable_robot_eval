@@ -10,9 +10,13 @@ clear
 python3 run.eval.py
 
 # Usability
-clear
-pushd ./wearable_robot_evaluation/usability
-./act-r.sh 10
-popd
-
-echo "Finish"
+#clear
+#echo "Start Usability"
+#pushd ./wearable_robot_evaluation/usability
+#./act-r.sh 10 &
+#PID_ACT_R=$!
+## Wait for 2 seconds
+#sleep 2
+#kill $PID_ACT_R
+#popd
+#echo "Finish Usability"
