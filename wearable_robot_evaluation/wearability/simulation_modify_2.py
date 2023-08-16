@@ -112,7 +112,7 @@ def test_safety(baselink_angle=0, device_angle=175):
             #X1 = X - np.linalg.solve(jj_func(X), ff_func(X))
             X = X1
             err = max(np.abs(ff_func(X)))
-            print(f'i: {i}, error: {err}')
+            #print(f'i: {i}, error: {err}')
             errors.append(err)
             if err <= tol:
                 break
@@ -247,3 +247,5 @@ def test_safety(baselink_angle=0, device_angle=175):
     plt.show(block=False)
     plt.pause(3)
     plt.close()
+
+#test_safety(baselink_angle=0, device_angle=175)
