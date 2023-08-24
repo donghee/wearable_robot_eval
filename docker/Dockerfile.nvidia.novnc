@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     dirmngr \
     gpg-agent \
     curl \
-    yadm \
     && rm -rf /var/lib/apt/lists/*
 
 # Configure timezone
@@ -209,6 +208,21 @@ RUN mv /etc/xdg/autostart/light-locker.desktop /etc/xdg/autostart/light-locker.d
 RUN mv /etc/xdg/autostart/xfce4-power-manager.desktop /etc/xdg/autostart/xfce4-power-manager.desktop_bak
 RUN mv /usr/bin/lxpolkit /usr/bin/lxpolkit_bak
  
+# wearable robot evaluation
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3-tk libbz2-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+RUN pip3 install -U \
+    pandas scipy
+
+RUN cd /tmp && \
+    curl -L -O http://prdownloads.sourceforge.net/sbcl/sbcl-2.0.9-x86-64-linux-binary.tar.bz2 && \
+    tar -xf sbcl-2.0.9-x86-64-linux-binary.tar.bz2 && rm sbcl-2.0.9-x86-64-linux-binary.tar.bz2 && \
+    cd sbcl-2.0.9-x86-64-linux && sudo sh install.sh && cd .. && rm -r sbcl-2.0.9-x86-64-linux && \
+    wget https://beta.quicklisp.org/quicklisp.lisp && sbcl --quit --load quicklisp.lisp --eval '(quicklisp-quickstart:install :path "quicklisp")' && rm quicklisp.lisp
+
 # Add user to share files and folder without root permissions
 ENV GROUP_ID=1000
 ENV USER_ID=1000
@@ -298,13 +312,9 @@ RUN sudo sed -i "s/Clearlooks/Arc-Darker/g" /etc/xdg/openbox/rc.xml
 RUN mkdir -p $HOME/.config/lxpanel/LXDE/panels/
 COPY files/panel $HOME/.config/lxpanel/LXDE/panels/
 
-# nginx
-#COPY files/nginx.conf /etc/nginx/sites-available/default
-#RUN systemctl restart nginx 
-
 RUN sudo chown -R $USER:$USER $HOME
 
-COPY ./ros_entrypoint.sh /
 COPY ./bootstrap.sh /
+COPY ./ros_entrypoint.sh /
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
