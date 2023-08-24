@@ -11,8 +11,9 @@ docker run -it \
     --env="DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
     --workdir="/root" \
+    -p 6080:6080 \
     ghcr.io/donghee/wearable_robot_eval:foxy_nvidia_novnc \
-    bash -c "/bootstrap.sh && bash"
+    bash -c "/bootstrap.sh && sudo chmod 777 -R /tmp/.X11-unix && /opt/TurboVNC/bin/vncserver -wm LXDE -SecurityTypes None :99 && /opt/noVNC/utils/websockify/run --verbose --web=/opt/noVNC/ 6080 127.0.0.1:5999"
 
 # no gpu
 #docker run -it \
