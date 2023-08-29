@@ -99,8 +99,16 @@ def generate_launch_description():
             cmd=["ls", "-al"], output="screen"
         ),
         launch.actions.TimerAction(
+            actions=[launch.actions.LogInfo(msg="휴먼 트윈 생성 완료")],
+            period = 4.0
+        ),
+        launch.actions.TimerAction(
             actions=[launch.actions.LogInfo(msg="Wait For The Right Arm's Oscillation to Stabilize!")],
             period = 5.0
+        ),
+        launch.actions.TimerAction(
+            actions=[launch.actions.LogInfo(msg="상지 웨어러블 디바이스 트윈 불러오기 완료")],
+            period = 40.0
         ),
         launch.actions.TimerAction(
             actions=[test_eduexo_0],
@@ -125,5 +133,9 @@ def generate_launch_description():
         launch.actions.TimerAction(
             actions=[test_eduexo_5],
             period = 70.0
+        ),
+        launch.actions.TimerAction(
+            actions=[launch.actions.LogInfo(msg="상지 동작 수행 완료")],
+            period = 72.0
         )
     ])
