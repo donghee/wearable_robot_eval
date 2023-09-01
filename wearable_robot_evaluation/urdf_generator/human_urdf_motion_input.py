@@ -19,26 +19,25 @@ class Human:
         Head Circumference: {self.head_circumference} cm"""
 
 def create_human_urdf(human):
+    global muscle_strength, lower_motion_range, upper_motion_range
     robot = URDF.from_xml_file('human_45dof.urdf')
-    elbow_length = 0.30
 
-    for link in robot.links:
-        print(link.name)
-        if 'elbow' in link.name:
-            link.visual.origin.position = [0.0, -elbow_length, 0.0]
-            link.collision.origin.position = [0.0, -elbow_length, 0.0]
-        if link.visual and link.visual.origin:
-            print(link.visual.origin.position)
-        if link.collision:
-            print(link.collision.origin.position)
+    for joint in robot.joints:
+        print(joint.name)
+        if 'right_elbow' in joint.name:
+            joint.limit.effort = muscle_strength
+            joint.limit.lower = lower_motion_range
+            joint.limit.upper = upper_motion_range
+            joint.limit.velocity = '100.0'
 
     return robot.to_xml_string()
 
 if __name__ == "__main__":
+    global muscle_strength, lower_motion_range, upper_motion_range
     print("휴먼 트윈의 상지운동 최대 근력 및 가동 범위 입력")
     muscle_strength = float(input("Enter the maximum muscle strength in N/m: "))
-    min_motion_range = float(input("Enter the min degree of motion input in degree: "))
-    max_motion_range = float(input("Enter the max degree of motion input in degree: "))
+    lower_motion_range = float(input("Enter the min degree of motion input in degree: "))
+    upper_motion_range = float(input("Enter the max degree of motion input in degree: "))
     print("휴먼 트윈의 상지운동 최대 근력 및 가동 범위 입력 완료")
     print("-----------------------------")
     input("\nPress enter to continue...\n")
