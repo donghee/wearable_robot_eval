@@ -7,6 +7,7 @@ from rclpy.action import ActionClient
 from rclpy.node import Node
 from control_msgs.action import FollowJointTrajectory
 from trajectory_msgs.msg import JointTrajectoryPoint
+import time
 
 # ros2 action list -t
 # ros2 action info /joint_trajectory_controller/follow_joint_trajectory -t
@@ -17,6 +18,7 @@ class OneDofArmActionClient(Node):
     def __init__(self):
         super().__init__('one_dof_arm_actionclient')
         self._action_client = ActionClient(self, FollowJointTrajectory, '/joint_trajectory_controller/follow_joint_trajectory')
+        self.goal_order = 0
 
     def send_goal(self, angle):
         goal_msg = FollowJointTrajectory.Goal()
@@ -60,6 +62,31 @@ class OneDofArmActionClient(Node):
     def get_result_callback(self, future):
         result = future.result().result
         self.get_logger().info('Result: '+str(result))
+        time.sleep(3)
+        if self.goal_order == 0:
+            self.send_goal(-1.0)
+            self.goal_order = self.goal_order + 1
+            return
+
+        if self.goal_order == 1:
+            self.send_goal(-3.0)
+            self.goal_order = self.goal_order + 1
+            return
+
+        if self.goal_order == 2:
+            self.send_goal(-1.0)
+            self.goal_order = self.goal_order + 1
+            return
+
+        if self.goal_order == 3:
+            self.send_goal(-3.0)
+            self.goal_order = self.goal_order + 1
+            return
+
+        if self.goal_order == 4:
+            self.send_goal(-1.0)
+            self.get_logger().info("상지 동작 수행 완료")
+
         rclpy.shutdown()
 
     def feedback_callback(self, feedback_msg):

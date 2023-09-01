@@ -8,6 +8,7 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+import launch.actions
 
 import xacro
 
@@ -87,5 +88,9 @@ def generate_launch_description():
         joint_state_publisher_node,
         joint_state_broadcaster_node,
         joint_trajectory_controller_node,
+        launch.actions.TimerAction(
+            actions=[launch.actions.LogInfo(msg="상지 웨어러블 디바이스 트윈 불러오기 완료")],
+            period = 4.0
+        ),
     ])
 

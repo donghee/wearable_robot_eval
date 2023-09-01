@@ -8,6 +8,9 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+import launch.actions
+import launch.events
+import launch.substitutions
 
 import xacro
 
@@ -64,7 +67,7 @@ def generate_launch_description():
         output="screen",
     )
 
-    return LaunchDescription([
+    ld = LaunchDescription([
         DeclareLaunchArgument(
             'use_sim_time',
             default_value='false',
@@ -89,5 +92,17 @@ def generate_launch_description():
         #joint_state_publisher_node,
         #joint_state_broadcaster_node,
         #joint_trajectory_controller_node,
+        launch.actions.TimerAction(
+            actions=[launch.actions.LogInfo(msg="휴먼 트윈 생성 완료")],
+            period = 4.0
+        )
     ])
 
+    ld.add_action(launch.actions.RegisterEventHandler(launch.event_handlers.OnShutdown(
+        on_shutdown=[launch.actions.LogInfo(msg=[
+            '동작 수행에 따른 데이터 저장 완료\n                      ---------------------------------',
+            launch.substitutions.LocalSubstitution('event.reason'),
+        ])],
+    )))
+
+    return ld
