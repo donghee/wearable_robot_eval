@@ -18,7 +18,14 @@ namespace gazebo
     std::ofstream csv_file_;
 
     public: WearableRobot() {
-      csv_file_.open("/tmp/human.csv");
+      const char* home_dir_ = std::getenv("HOME");
+      if (!home_dir_) {
+          RCLCPP_ERROR(
+            this->ros_node_->get_logger(),
+            "HOME environment variable not found.");
+        return;
+      }
+      csv_file_.open(std::string(home_dir_) + "/ros2_ws/output/simulation_result.csv");
       csv_file_ << "t, x, y, z\n";
     }
 
