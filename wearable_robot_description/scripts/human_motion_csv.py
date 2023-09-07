@@ -67,7 +67,7 @@ class Animator(Node):
 
         self.in_dir = self.declare_parameter("in_dir", "./motions").value
         self.out_dir = self.declare_parameter("out_dir", "./motions/converted").value
-        self.speed = self.declare_parameter("speed", 0.01).value
+        self.speed = self.declare_parameter("speed", 0.005).value
         self.store_converted = self.declare_parameter("store_converted", False).value
 
         self.files = []
@@ -123,15 +123,15 @@ class Animator(Node):
         chest_rotation = self.quat_to_euler(frame[7],frame[8],frame[9],frame[10])
         neck_rotation = self.quat_to_euler(frame[11],frame[12],frame[13],frame[14])
         right_hip_rotation = self.quat_to_euler(frame[15],frame[16],frame[17],frame[18])
-        right_knee_rotation = self.quat_to_euler(frame[19],frame[20],frame[21],frame[22])[0]
+        right_knee_rotation = self.quat_to_euler(frame[19],frame[20],frame[21],frame[22])[2]
         right_ankle_rotation = self.quat_to_euler(frame[23],frame[24],frame[25],frame[26])
         right_shoulder_rotation = self.quat_to_euler(frame[27],frame[28],frame[29],frame[30])
-        right_elbow_rotation = self.quat_to_euler(frame[31],frame[32],frame[33],frame[34])[0]
-        left_hip_rotation = self.quat_to_euler(frame[35],frame[36],frame[37],frame[38])
-        left_knee_rotation = self.quat_to_euler(frame[39],frame[40],frame[41],frame[42])[0]
-        left_ankle_rotation = self.quat_to_euler(frame[43],frame[44],frame[45],frame[46])
-        left_shoulder_rotation = self.quat_to_euler(frame[47],frame[48],frame[49],frame[50])
-        left_elbow_rotation = self.quat_to_euler(frame[51],frame[52],frame[53],frame[54])[0]
+        right_elbow_rotation = self.quat_to_euler(frame[31],frame[32],frame[33],frame[34])[2]
+        left_hip_rotation = self.quat_to_euler(frame[39],frame[40],frame[41],frame[42])
+        left_knee_rotation = self.quat_to_euler(frame[43],frame[44],frame[45],frame[46])[2]
+        left_ankle_rotation = self.quat_to_euler(frame[47],frame[48],frame[49],frame[50])
+        left_shoulder_rotation = self.quat_to_euler(frame[51],frame[52],frame[53],frame[54])
+        left_elbow_rotation = self.quat_to_euler(frame[55],frame[56],frame[57],frame[58])[2]
         
         s.name = [
             "j_root_chest_joint1",
