@@ -25,6 +25,9 @@ pyenv global 3.7.17
 sudo apt-get update; sudo apt-get install python3-tk libbz2-dev -y
 bash -c "pip3 install pandas scipy numpy matplotlib"
 
+# URDF Generator
+bash -c "pip3 install urdf_parser_py"
+
 # Usability: sbcl, quicklisp
 cd /tmp
 wget http://prdownloads.sourceforge.net/sbcl/sbcl-2.0.9-x86-64-linux-binary.tar.bz2

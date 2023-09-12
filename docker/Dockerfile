@@ -215,7 +215,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean
 
 RUN pip3 install -U \
-    pandas scipy
+    pandas scipy urdf_parser_py
 
 RUN cd /tmp && \
     curl -L -O http://prdownloads.sourceforge.net/sbcl/sbcl-2.0.9-x86-64-linux-binary.tar.bz2 && \
