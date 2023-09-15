@@ -1,17 +1,15 @@
-controller_manager:
-  ros__parameters:
-    update_rate: 1000  # Hz
-
-    joint_trajectory_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-
-    joint_state_controller:
-      type: joint_state_controller/JointStateController
-
-    joint_state_broadcaster:
-      type: joint_state_broadcaster/JointStateBroadcaster
-
-joint_trajectory_controller:
+eduexo:
+  controller_manager:
+    ros__parameters:
+      update_rate: 1000  # Hz
+  
+      eduexo_joint_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
+  
+      eduexo_joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+  
+eduexo_joint_controller:
   ros__parameters:
     joints:
        - arm_joint
@@ -22,4 +20,3 @@ joint_trajectory_controller:
 
     state_interfaces:
       - position
-      - velocity

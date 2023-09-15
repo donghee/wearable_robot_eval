@@ -9,20 +9,15 @@ from launch_ros.actions import Node
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 import launch.actions
+from launch.actions import ExecuteProcess
 
 import xacro
 
 def generate_launch_description():
     pkg_wearable_robot_path = get_package_share_path('wearable_robot_description')
-
     one_dof_arm_model_path = pkg_wearable_robot_path / 'urdf/eduexo_v2.xacro'
-    #default_model_path = pkg_wearable_robot_path / 'urdf/human_66dof.xacro'
     default_rviz_config_path = pkg_wearable_robot_path / 'rviz/urdf.rviz'
-
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
-
-    pkg_wearable_robot_description = get_package_share_directory('wearable_robot_description')
-
     install_dir = get_package_prefix('wearable_robot_description')
 
     if 'GAZEBO_MODEL_PATH' in os.environ:
@@ -38,27 +33,33 @@ def generate_launch_description():
     one_dof_arm_description_config = xacro.process_file(str(one_dof_arm_model_path))
     one_dof_arm_desc = one_dof_arm_description_config.toxml()
 
-    #robot_description_config = xacro.process_file(str(default_model_path))
-    #robot_desc = robot_description_config.toxml()
-
-    #print(robot_desc)
+    robot_name = "eduexo"
+    #robot_name = ""
+    if robot_name:
+        namespace = "/" + robot_name
+    else:
+        namespace = ""
 
     joint_state_publisher_node = Node(
         package='joint_state_publisher',
-        executable='joint_state_publisher'
+        executable='joint_state_publisher',
+        namespace=namespace,
     )
 
     joint_state_broadcaster_node = Node(
         package="controller_manager",
         executable="spawner.py",
-        arguments=["joint_state_broadcaster"],
+        namespace=namespace,
+        #arguments=["joint_state_broadcaster", "-c", namespace+"/controller_manager"],
+        arguments=["eduexo_joint_state_broadcaster", "-c", namespace+"/controller_manager"],
         output="screen",
     )
 
     joint_trajectory_controller_node = Node(
         package="controller_manager",
         executable="spawner.py",
-        arguments=["joint_trajectory_controller"],
+        namespace=namespace,
+        arguments=["eduexo_joint_controller", "-c", namespace+"/controller_manager"],
         output="screen",
     )
 
@@ -67,25 +68,36 @@ def generate_launch_description():
             'use_sim_time',
             default_value='false',
             description='Use simulation (Gazebo) clock if true'),
-        Node(package='wearable_robot_description', executable='spawn_entity_v2.py', arguments=['eduexo', one_dof_arm_desc, '0.8', '1.0', '0.9675'], output='screen'),
+        #Node(package='wearable_robot_description', executable='spawn_entity_v2.py', arguments=['eduexo', one_dof_arm_desc, '0.8', '1.0', '0.9675'], output='screen'),
         #Node(package='wearable_robot_description', executable='spawn_entity_v2.py', arguments=['eduexo', one_dof_arm_desc, '0.0', '0.0', '0.0'], output='screen'),
         #Node(package='wearable_robot_description', executable='spawn_entity.py', arguments=['one_dof_arm', one_dof_arm_desc], output='screen'),
         #Node(package='wearable_robot_description', executable='spawn_entity.py', arguments=['human', robot_desc], output='screen'),
+
+        Node(package='gazebo_ros', 
+             executable='spawn_entity.py',
+             arguments=[
+                 "-topic", namespace + "/robot_description",
+                 "-entity", robot_name,
+                 "-robot_namespace", namespace,
+                 "-x", "0.8",
+                 "-y", "1.0",
+                 "-z", "0.9675",
+                 "-Y", "0.0",
+                 "-unpause",
+                 ],
+             output='screen'),
+
         Node(
             package="robot_state_publisher",
+            namespace=namespace,
             executable="robot_state_publisher",
-            name="robot_state_publisher",
+            output="screen",
+            remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
             parameters=[
                 {"robot_description": one_dof_arm_desc}],
-            output="screen"),
-        # Node(
-        #     package="robot_state_publisher",
-        #     executable="robot_state_publisher",
-        #     name="robot_state_publisher",
-        #     parameters=[
-        #         {"robot_description": robot_desc}],
-        #     output="screen"),
-        joint_state_publisher_node,
+            ),
+
+        #joint_state_publisher_node,
         joint_state_broadcaster_node,
         joint_trajectory_controller_node,
         launch.actions.TimerAction(
