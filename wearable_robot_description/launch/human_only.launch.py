@@ -64,6 +64,15 @@ def generate_launch_description():
         output="screen",
     )
 
+    effort_controller_node = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        namespace=namespace,
+        arguments=["effort_controller", "-c", namespace+"/controller_manager"],
+        output="screen",
+    )
+
+
     load_joint_state_broadcaster = ExecuteProcess(
         cmd=[
             "ros2",
@@ -132,7 +141,8 @@ def generate_launch_description():
         #joint_state_publisher_node,
 
         joint_state_broadcaster_node,
-        joint_trajectory_controller_node,
+        #joint_trajectory_controller_node,
+        effort_controller_node,
 
         #load_joint_state_broadcaster,
         #load_joint_trajectory_controller,
