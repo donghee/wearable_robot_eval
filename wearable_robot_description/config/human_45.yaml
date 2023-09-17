@@ -1,0 +1,48 @@
+forward_position_controller:
+  ros__parameters:
+    joints:
+      - j_root_chest_joint1
+      - j_root_chest_joint2
+      - j_root_chest_joint3
+      - j_chest_neck_joint1
+      - j_chest_neck_joint2
+      - j_chest_neck_joint3
+      - j_root_right_hip_joint1
+      - j_root_right_hip_joint2
+      - j_root_right_hip_joint3
+      - j_right_knee
+      - j_right_knee_right_ankle_joint1
+      - j_right_knee_right_ankle_joint2
+      - j_right_knee_right_ankle_joint3
+      - j_chest_right_shoulder_joint1
+      - j_chest_right_shoulder_joint2
+      - j_chest_right_shoulder_joint3
+      - j_right_elbow
+      - j_root_left_hip_joint1
+      - j_root_left_hip_joint2
+      - j_root_left_hip_joint3
+      - j_left_knee
+      - j_left_knee_left_ankle_joint1
+      - j_left_knee_left_ankle_joint2
+      - j_left_knee_left_ankle_joint3
+      - j_chest_left_shoulder_joint1
+      - j_chest_left_shoulder_joint2
+      - j_chest_left_shoulder_joint3
+      - j_left_elbow
+
+    interface_name: position
+
+human_45:
+  controller_manager:
+    ros__parameters:
+      update_rate: 1000 # Hz
+      use_sim_time: true
+  
+      forward_position_controller:
+        type: forward_command_controller/ForwardCommandController
+  
+      joint_state_controller:
+        type: joint_state_controller/JointStateController
+  
+      joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
