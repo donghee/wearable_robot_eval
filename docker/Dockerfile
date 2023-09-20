@@ -312,6 +312,10 @@ RUN sudo sed -i "s/Clearlooks/Arc-Darker/g" /etc/xdg/openbox/rc.xml
 RUN mkdir -p $HOME/.config/lxpanel/LXDE/panels/
 COPY files/panel $HOME/.config/lxpanel/LXDE/panels/
 
+# nginx
+COPY files/nginx.conf /etc/nginx/sites-available/default
+RUN systemctl restart nginx
+
 RUN sudo chown -R $USER:$USER $HOME
 
 COPY ./bootstrap.sh /

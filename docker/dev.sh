@@ -14,6 +14,7 @@ fi
 ID=$@
 NOVNC_PORT=$((6080 + $ID))
 VNC_PORT=$((5900 + $ID))
+HTTP_PORT=80
 
 docker run -it \
     --gpus all \
@@ -31,4 +32,5 @@ docker run -it \
     ghcr.io/donghee/wearable_robot_eval:foxy_nvidia_novnc_user_$USER \
     bash -c "/bootstrap.sh && sudo chmod 777 -R /tmp/.X11-unix && /opt/TurboVNC/bin/vncserver -wm LXDE -SecurityTypes None :$ID && /opt/noVNC/utils/websockify/run --verbose --web=/opt/noVNC/ 6080 127.0.0.1:$VNC_PORT"
     
-#    bash -c "sudo chmod 777 -R /tmp/.X11-unix && /opt/TurboVNC/bin/vncserver -wm LXDE -SecurityTypes None :$ID && /opt/noVNC/utils/websockify/run --verbose --web=/opt/noVNC/ 6080 127.0.0.1:$VNC_PORT"
+#    -p $HTTP_PORT:80 \
+#    --user="$(id -u):$(stat -c %g /dev/nvidia0)"
