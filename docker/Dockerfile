@@ -224,13 +224,13 @@ RUN cd /tmp && \
     wget https://beta.quicklisp.org/quicklisp.lisp && sbcl --quit --load quicklisp.lisp --eval '(quicklisp-quickstart:install :path "quicklisp")' && rm quicklisp.lisp
 
 # Add user to share files and folder without root permissions
-ENV GROUP_ID=1000
-ENV USER_ID=1000
+ARG UID=1000
+ARG GID=1000
 ARG USER=root
 ARG HOME=/root
 
 RUN if [ "$USER" != "root" ]; then \
- addgroup --gid $GROUP_ID $USER && adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID $USER \
+ addgroup --gid $GID $USER && adduser --disabled-password --gecos '' --uid $UID --gid $GID $USER \
  && echo "vglusers:x:1001:${USER}" >> /etc/group \
  && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers; \
 fi
@@ -316,5 +316,8 @@ RUN sudo chown -R $USER:$USER $HOME
 
 COPY ./bootstrap.sh /
 COPY ./ros_entrypoint.sh /
+
+# nginx
+COPY files/nginx.conf /etc/nginx/sites-enabled/default
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
