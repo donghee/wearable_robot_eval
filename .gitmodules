@@ -1,0 +1,4 @@
+[submodule "gazebo_ros2_control"]
+	path = gazebo_ros2_control
+	url = git@github.com:donghee/gazebo_ros2_control.git
+	branch = foxy
