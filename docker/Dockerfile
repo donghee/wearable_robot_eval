@@ -215,7 +215,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean
 
 RUN pip3 install -U \
-    pandas scipy urdf_parser_py
+    pandas scipy urdf_parser_py flask
 
 RUN cd /tmp && \
     curl -L -O http://prdownloads.sourceforge.net/sbcl/sbcl-2.0.9-x86-64-linux-binary.tar.bz2 && \
@@ -314,7 +314,6 @@ COPY files/panel $HOME/.config/lxpanel/LXDE/panels/
 
 # nginx
 COPY files/nginx.conf /etc/nginx/sites-available/default
-RUN systemctl restart nginx
 
 RUN sudo chown -R $USER:$USER $HOME
 

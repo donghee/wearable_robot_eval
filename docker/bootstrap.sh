@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+sudo /etc/init.d/nginx start
+
 #source "/opt/ros/$ROS_DISTRO/setup.bash" --
 
 if [ ! -d ~/ros2_ws/src ]; then
