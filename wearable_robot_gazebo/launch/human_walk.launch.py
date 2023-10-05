@@ -14,20 +14,23 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
 
-    pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
     pkg_wearable_robot_gazebo = get_package_share_directory('wearable_robot_gazebo')
+    pkg_wearable_robot_description = get_package_share_directory('wearable_robot_description')
 
-    # Gazebo launch
-    gazebo = IncludeLaunchDescription(
+    # Start World
+    start_world = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_gazebo_ros, 'launch', 'gazebo.launch.py'),
+            os.path.join(pkg_wearable_robot_gazebo, 'launch', 'start_world_launch.py'),
         )
-    )    
+    )
+
+    spawn_robot_world = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_wearable_robot_description, 'launch', 'human_walk.launch.py'),
+        )
+    )     
 
     return LaunchDescription([
-        DeclareLaunchArgument(
-          'world',
-          default_value=[os.path.join(pkg_wearable_robot_gazebo, 'worlds', 'empty.world'), ''],
-          description='SDF world file'),
-        gazebo
+        start_world,
+        spawn_robot_world
     ])

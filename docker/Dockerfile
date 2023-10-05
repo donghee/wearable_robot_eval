@@ -320,4 +320,7 @@ RUN sudo chown -R $USER:$USER $HOME
 COPY ./bootstrap.sh /
 COPY ./ros_entrypoint.sh /
 
+# nginx
+COPY files/nginx.conf /etc/nginx/sites-enabled/default
+
 ENTRYPOINT ["/ros_entrypoint.sh"]

@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<robot>
+  <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
+      <ros>
+        <namespace>/eduexo</namespace>
+      </ros>
+      <parameters>$(find wearable_robot_description)/config/eduexo.yaml</parameters>
+    </plugin>
+  </gazebo>
+ 
+  <gazebo>
+    <plugin name="wearable_robot_controller" filename="libwearable_robot_controller_plugin.so">
+      <force>-1.0 0 0</force>
+      <link>arm_link</link>
+    </plugin>
+  </gazebo>
+ 
+  <gazebo reference="arm_link">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+  <gazebo reference="forearm_link">
+    <mu1>0.2</mu1>
+    <mu2>0.2</mu2>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <gazebo reference="forearm_band_link">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <gazebo reference="arm_band_link">
+    <mu1>Inf</mu1>
+    <mu2>Inf</mu2>
+    <material>Gazebo/Red</material>
+    <visual>
+      <transparency>9.9</transparency>
+    </visual>
+  </gazebo>
+
+  <gazebo reference="arm_band_point_1">
+    <mu1>Inf</mu1>
+    <mu2>Inf</mu2>
+    <material>Gazebo/Red</material>
+  </gazebo>
+
+  <gazebo reference="arm_band_point_2">
+    <mu1>Inf</mu1>
+    <mu2>Inf</mu2>
+    <material>Gazebo/Green</material>
+  </gazebo>
+
+  <gazebo reference="arm_band_point_3">
+    <mu1>Inf</mu1>
+    <mu2>Inf</mu2>
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <gazebo reference="arm_band_point_4">
+    <mu1>Inf</mu1>
+    <mu2>Inf</mu2>
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+</robot>

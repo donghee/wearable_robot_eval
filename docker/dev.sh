@@ -24,7 +24,9 @@ docker run -it \
     --volume="$HOME/src:$HOME/src:rw" \
     --volume="$HOME/.ssh:$HOME/.ssh:ro" \
     --workdir="${HOME}" \
+    --user="$(id -u):$(id -g)" \
     --rm \
+    -p 80:80 \
     -p $NOVNC_PORT:6080 \
     -p $VNC_PORT:$VNC_PORT \
     -p $HTTP_PORT:80 \

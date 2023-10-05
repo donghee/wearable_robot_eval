@@ -6,9 +6,7 @@
       <ros>
         <namespace>/human</namespace>
       </ros>
-      <namespace>/human</namespace>
       <parameters>$(find wearable_robot_description)/config/human.yaml</parameters>
-      <robot_param_node>/human/robot_state_publisher</robot_param_node> 
     </plugin>
   </gazebo>
 

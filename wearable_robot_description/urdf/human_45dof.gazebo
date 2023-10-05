@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<robot>
+  <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
+      <ros>
+        <namespace>/human_45</namespace>
+      </ros>
+      <parameters>$(find wearable_robot_description)/config/human_45.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="left_hip">
+    <gravity>false</gravity>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <gazebo reference="left_knee">
+    <gravity>false</gravity>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <gazebo reference="left_knee_left_ankle_link1">
+    <gravity>false</gravity>
+    <material>Gazebo/Orange</material>
+
+    <implicitSpringDamper>1</implicitSpringDamper>
+    <mu1>100000</mu1>
+    <mu2>100000</mu2>
+    <kp>100000000.0</kp>
+    <kd>1.0</kd>
+
+    <collision>
+      <surface>
+        <friction>
+          <torsional>
+            <coefficient>10.0</coefficient>
+            <use_patch_radius>true</use_patch_radius>
+            <patch_radius>0.05</patch_radius>
+          </torsional>
+        </friction>
+        <contact>
+          <poissons_ratio>0.5</poissons_ratio>
+          <elastic_modulus>1e8</elastic_modulus>
+        </contact>
+      </surface>
+    </collision>
+    <!-- <mu1>10</mu1> -->
+    <!-- <mu2>10</mu2> -->
+    <maxVel>1</maxVel>
+    <!-- <kp>1e15</kp> -->
+    <!-- <kd>1e13</kd> -->
+    <fdir1>0 0 1</fdir1>
+    <minDepth>0.001</minDepth>
+    <maxContacts>100</maxContacts>
+    <material>Gazebo/RedBright</material>
+ 
+  </gazebo>
+
+  <gazebo reference="left_knee_left_ankle_link2">
+    <gravity>false</gravity>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <gazebo reference="left_ankle">
+    <gravity>false</gravity>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <gazebo reference="right_hip">
+    <gravity>false</gravity>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <gazebo reference="right_knee">
+    <gravity>false</gravity>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <gazebo reference="right_knee_right_ankle_link1">
+    <gravity>false</gravity>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <gazebo reference="right_knee_right_ankle_link2">
+    <gravity>false</gravity>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+  <gazebo reference="right_ankle">
+    <gravity>false</gravity>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
+
+</robot>
