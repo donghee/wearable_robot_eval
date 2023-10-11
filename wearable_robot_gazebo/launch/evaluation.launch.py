@@ -43,7 +43,7 @@ def generate_launch_description():
     test_eduexo_0 = launch_ros.actions.Node(
             package='wearable_robot_description',
             #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='1_dof_arm_gazebo_test.py',
+            executable='eduexo_arm_gazebo_test.py',
             arguments=['-2.8'],
             output='screen',
         )
@@ -51,7 +51,7 @@ def generate_launch_description():
     test_eduexo_1 = launch_ros.actions.Node(
             package='wearable_robot_description',
             #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='1_dof_arm_gazebo_test.py',
+            executable='eduexo_arm_gazebo_test.py',
             arguments=['-1.0'],
             output='screen',
         )
@@ -59,7 +59,7 @@ def generate_launch_description():
     test_eduexo_2 = launch_ros.actions.Node(
             package='wearable_robot_description',
             #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='1_dof_arm_gazebo_test.py',
+            executable='eduexo_arm_gazebo_test.py',
             arguments=['-2.8'],
             output='screen',
         )
@@ -67,7 +67,7 @@ def generate_launch_description():
     test_eduexo_3 = launch_ros.actions.Node(
             package='wearable_robot_description',
             #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='1_dof_arm_gazebo_test.py',
+            executable='eduexo_arm_gazebo_test.py',
             arguments=['-1.0'],
             output='screen',
         )
@@ -75,7 +75,7 @@ def generate_launch_description():
     test_eduexo_4 = launch_ros.actions.Node(
             package='wearable_robot_description',
             #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='1_dof_arm_gazebo_test.py',
+            executable='eduexo_arm_gazebo_test.py',
             arguments=['-2.8'],
             output='screen',
         )
@@ -83,7 +83,7 @@ def generate_launch_description():
     test_eduexo_5 = launch_ros.actions.Node(
             package='wearable_robot_description',
             #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='1_dof_arm_gazebo_test.py',
+            executable='eduexo_arm_gazebo_test.py',
             arguments=['-1.0'],
             output='screen',
         )
@@ -114,26 +114,26 @@ def generate_launch_description():
             actions=[test_eduexo_0],
             period = 45.0
         ),
-        launch.actions.TimerAction(
-            actions=[test_eduexo_1],
-            period = 50.0
-        ),
-        launch.actions.TimerAction(
-            actions=[test_eduexo_2],
-            period = 55.0
-        ),
-        launch.actions.TimerAction(
-            actions=[test_eduexo_3],
-            period = 60.0
-        ),
-        launch.actions.TimerAction(
-            actions=[test_eduexo_4],
-            period = 65.0
-        ),
-        launch.actions.TimerAction(
-            actions=[test_eduexo_5],
-            period = 70.0
-        ),
+#        launch.actions.TimerAction(
+#            actions=[test_eduexo_1],
+#            period = 50.0
+#        ),
+#        launch.actions.TimerAction(
+#            actions=[test_eduexo_2],
+#            period = 55.0
+#        ),
+#        launch.actions.TimerAction(
+#            actions=[test_eduexo_3],
+#            period = 60.0
+#        ),
+#        launch.actions.TimerAction(
+#            actions=[test_eduexo_4],
+#            period = 65.0
+#        ),
+#        launch.actions.TimerAction(
+#            actions=[test_eduexo_5],
+#            period = 70.0
+#        ),
         launch.actions.TimerAction(
             actions=[launch.actions.LogInfo(msg="상지 동작 수행 완료")],
             period = 72.0
