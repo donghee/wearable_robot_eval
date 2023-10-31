@@ -13,10 +13,30 @@
   <gazebo>
     <plugin name="wearable_robot_controller" filename="libwearable_robot_controller_plugin.so">
       <force>-1.0 0 0</force>
-      <link>arm_link</link>
+      <link>forearm_link</link>
+      <joint>arm_joint</joint>
     </plugin>
   </gazebo>
- 
+
+  <gazebo reference="arm_joint">
+    <provide_feedback>true</provide_feedback>
+    <provideFeedback>true</provideFeedback>
+    <physics>
+      <provide_feedback>true</provide_feedback>
+      <ode>
+        <provide_feedback>true</provide_feedback>
+      </ode>
+    </physics>
+  </gazebo>
+
+  <gazebo>
+    <plugin name="eduexo_ft_sensor" filename="libgazebo_ros_ft_sensor.so">
+      <update_rate>100.0</update_rate>
+      <body_name>forearm_link</body_name>
+      <joint_name>arm_joint</joint_name>
+    </plugin>
+  </gazebo>
+
   <gazebo reference="arm_link">
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>

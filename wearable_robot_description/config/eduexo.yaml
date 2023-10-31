@@ -2,17 +2,21 @@ eduexo:
   controller_manager:
     ros__parameters:
       update_rate: 1000  # Hz
+      # use_sim_time: true
   
       eduexo_joint_controller:
         type: joint_trajectory_controller/JointTrajectoryController
-  
+
       eduexo_joint_state_broadcaster:
         type: joint_state_broadcaster/JointStateBroadcaster
-  
+ 
+      eduexo_forward_position_controller:
+        type: forward_command_controller/ForwardCommandController
+      
 eduexo_joint_controller:
   ros__parameters:
     joints:
-       - arm_joint
+      - arm_joint
 
     interface_name: position
     command_interfaces:
@@ -20,3 +24,10 @@ eduexo_joint_controller:
 
     state_interfaces:
       - position
+      - velocity
+
+eduexo_forward_position_controller:
+  ros__parameters:
+    joints:
+      - arm_joint
+    interface_name: position

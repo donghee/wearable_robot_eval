@@ -47,46 +47,6 @@ def generate_launch_description():
             arguments=['-2.8'],
             output='screen',
         )
- 
-    test_eduexo_1 = launch_ros.actions.Node(
-            package='wearable_robot_description',
-            #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='eduexo_arm_gazebo_test.py',
-            arguments=['-1.0'],
-            output='screen',
-        )
- 
-    test_eduexo_2 = launch_ros.actions.Node(
-            package='wearable_robot_description',
-            #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='eduexo_arm_gazebo_test.py',
-            arguments=['-2.8'],
-            output='screen',
-        )
- 
-    test_eduexo_3 = launch_ros.actions.Node(
-            package='wearable_robot_description',
-            #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='eduexo_arm_gazebo_test.py',
-            arguments=['-1.0'],
-            output='screen',
-        )
- 
-    test_eduexo_4 = launch_ros.actions.Node(
-            package='wearable_robot_description',
-            #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='eduexo_arm_gazebo_test.py',
-            arguments=['-2.8'],
-            output='screen',
-        )
- 
-    test_eduexo_5 = launch_ros.actions.Node(
-            package='wearable_robot_description',
-            #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='eduexo_arm_gazebo_test.py',
-            arguments=['-1.0'],
-            output='screen',
-        )
 
     return LaunchDescription([
         start_world,
@@ -98,42 +58,22 @@ def generate_launch_description():
         ExecuteProcess(
             cmd=["ls", "-al"], output="screen"
         ),
-        launch.actions.TimerAction(
-            actions=[launch.actions.LogInfo(msg="휴먼 트윈 생성 완료")],
-            period = 4.0
-        ),
+        #  launch.actions.TimerAction(
+        #      actions=[launch.actions.LogInfo(msg="휴먼 트윈 생성 완료")],
+        #      period = 4.0
+        #  ),
         launch.actions.TimerAction(
             actions=[launch.actions.LogInfo(msg="Wait For The Right Arm's Oscillation to Stabilize!")],
             period = 5.0
         ),
-        launch.actions.TimerAction(
-            actions=[launch.actions.LogInfo(msg="상지 웨어러블 디바이스 트윈 불러오기 완료")],
-            period = 40.0
-        ),
+        #  launch.actions.TimerAction(
+        #      actions=[launch.actions.LogInfo(msg="상지 웨어러블 디바이스 트윈 불러오기 완료")],
+        #      period = 40.0
+        #  ),
         launch.actions.TimerAction(
             actions=[test_eduexo_0],
             period = 45.0
         ),
-#        launch.actions.TimerAction(
-#            actions=[test_eduexo_1],
-#            period = 50.0
-#        ),
-#        launch.actions.TimerAction(
-#            actions=[test_eduexo_2],
-#            period = 55.0
-#        ),
-#        launch.actions.TimerAction(
-#            actions=[test_eduexo_3],
-#            period = 60.0
-#        ),
-#        launch.actions.TimerAction(
-#            actions=[test_eduexo_4],
-#            period = 65.0
-#        ),
-#        launch.actions.TimerAction(
-#            actions=[test_eduexo_5],
-#            period = 70.0
-#        ),
         launch.actions.TimerAction(
             actions=[launch.actions.LogInfo(msg="상지 동작 수행 완료")],
             period = 72.0

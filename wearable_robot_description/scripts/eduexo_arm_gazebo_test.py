@@ -7,8 +7,15 @@ from rclpy.action import ActionClient
 from rclpy.node import Node
 from control_msgs.action import FollowJointTrajectory
 from trajectory_msgs.msg import JointTrajectoryPoint
-import time
 
+import time
+from sensor_msgs.msg import JointState
+from geometry_msgs.msg import WrenchStamped
+import csv
+import math
+import random
+
+from rclpy.callback_groups import MutuallyExclusiveCallbackGroup
 # ros2 action list -t
 # ros2 action info /joint_trajectory_controller/follow_joint_trajectory -t
 # ros2 interface show control_msgs/action/FollowJointTrajectory
@@ -17,9 +24,57 @@ class OneDofArmActionClient(Node):
 
     def __init__(self):
         super().__init__('eduexo_arm_actionclient')
-        self._action_client = ActionClient(self, FollowJointTrajectory, '/eduexo_joint_controller/follow_joint_trajectory')
-        #self._action_client = ActionClient(self, FollowJointTrajectory, '/joint_trajectory_controller/follow_joint_trajectory')
         self.goal_order = 0
+        self.arm_joint_position = 0.0
+        self.arm_joint_torque = 0.0
+        self.arm_joint_motor_torque = 0.0
+        self.joint_state_subscription = self.create_subscription(
+                JointState,
+                'joint_states',
+                self.listener_joint_state_callback,
+                10)
+
+        self.wrench_subscription = self.create_subscription(
+                WrenchStamped,
+                '/eduexo/wrench',
+                self.listener_wrench_callback,
+                10)
+
+        self.start_time = self.get_clock().now()
+        self.export_csv_timer = self.create_timer(1.0/30.0, self.export_csv_callback)
+        self.state = "extension"
+
+        with open('/tmp/interaction.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([
+                "Timer", "State", "InteractionTorque", "Angle", "MotorTorque"
+            ])
+
+        self._action_client = ActionClient(self, FollowJointTrajectory, '/eduexo_joint_controller/follow_joint_trajectory')
+
+        self.arm_joint_motor_torque = 1.0
+        self.state = "flextion"
+        self.send_goal(-3.0)
+
+    def listener_joint_state_callback(self, msg):
+        #self.get_logger().info(f'Received joint states: {msg}')
+        if msg.name == ['arm_joint']:
+            self.arm_joint_position = msg.position[0]
+
+    def listener_wrench_callback(self, msg):
+        #self.get_logger().info(f'Received wrench torque: {msg.wrench.torque}')
+        self.arm_joint_torque = msg.wrench.torque.x
+
+    def export_csv_callback(self):
+        current_time = self.get_clock().now()
+        elapsed_time = current_time - self.start_time
+        elapsed_seconds = elapsed_time.nanoseconds / 1e9
+
+        with open('/tmp/interaction.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            data_row = [elapsed_seconds, self.state, self.arm_joint_torque,
+                        math.degrees(self.arm_joint_position)+270, self.arm_joint_motor_torque]
+            writer.writerow(data_row)
 
     def send_goal(self, angle):
         goal_msg = FollowJointTrajectory.Goal()
@@ -45,6 +100,7 @@ class OneDofArmActionClient(Node):
         goal_msg.trajectory.points = points
 
         self._action_client.wait_for_server()
+
         self._send_goal_future = self._action_client.send_goal_async(goal_msg, feedback_callback=self.feedback_callback)
 
         self._send_goal_future.add_done_callback(self.goal_response_callback)
@@ -65,30 +121,39 @@ class OneDofArmActionClient(Node):
         self.get_logger().info('Result: '+str(result))
         time.sleep(3)
         if self.goal_order == 0:
+            self.state = "extension"
+            self.arm_joint_motor_torque = -1.0 + ((random.random() - 0.5 )/4.0)
             self.send_goal(-1.0)
             self.goal_order = self.goal_order + 1
             return
 
         if self.goal_order == 1:
+            self.state = "flextion"
+            self.arm_joint_motor_torque = 1.0 + ((random.random() - 0.5 )/4.0)
             self.send_goal(-3.0)
             self.goal_order = self.goal_order + 1
             return
 
         if self.goal_order == 2:
+            self.state = "extension"
+            self.arm_joint_motor_torque = -1.0 + ((random.random() - 0.5 )/4.0)
             self.send_goal(-1.0)
             self.goal_order = self.goal_order + 1
             return
 
         if self.goal_order == 3:
+            self.state = "flextion"
+            self.arm_joint_motor_torque = 1.0 + ((random.random() - 0.5 )/4.0)
             self.send_goal(-3.0)
             self.goal_order = self.goal_order + 1
             return
 
         if self.goal_order == 4:
+            self.state = "extension"
+            self.arm_joint_motor_torque = -1.0 + ((random.random() - 0.5 )/4.0)
             self.send_goal(-1.0)
             self.get_logger().info("상지 동작 수행 완료")
-
-        rclpy.shutdown()
+            rclpy.shutdown()
 
     def feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
@@ -101,10 +166,10 @@ def main(args=None):
 
     action_client = OneDofArmActionClient()
 
-    angle = float(sys.argv[1])
-    future = action_client.send_goal(angle)
-
     rclpy.spin(action_client)
+
+    #  action_client.destory_node()
+    rclpy.shutdown()
 
 
 if __name__ == '__main__':
