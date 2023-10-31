@@ -237,7 +237,8 @@ class Animator(Node):
 
         with open('/tmp/toz.csv', 'a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(c.data)
+            data_row = [round(math.degrees(x), 2) for x in c.data]
+            writer.writerow(data_row)
         
         tr = self.get_robot_base_pose(frame)
         self.commands.publish(c)
