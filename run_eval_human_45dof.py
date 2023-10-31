@@ -16,5 +16,5 @@ def kill_process(proc, timeout=10):
     proc.wait()
 
 # Run simulation
-evaluation_proc = subprocess.Popen(['ros2', 'launch', 'wearable_robot_gazebo', 'evaluation.launch.py'], start_new_session=True)
+evaluation_proc = subprocess.Popen(['ros2', 'launch', 'wearable_robot_gazebo', 'evaluation_human_45dof.launch.py'], start_new_session=True)
 kill_process(evaluation_proc, 80)

@@ -7,4 +7,4 @@ cd ~/ros2_ws/src/wearable_robot_eval
 
 # Run Simulation and Wearability, Interactivity, Usability Evaluation
 clear
-python3 run.eval.py
+python3 run_eval_human_45dof.py

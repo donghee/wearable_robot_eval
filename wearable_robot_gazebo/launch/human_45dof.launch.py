@@ -26,7 +26,7 @@ def generate_launch_description():
 
     spawn_robot_world = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_wearable_robot_description, 'launch', 'human_walk.launch.py'),
+            os.path.join(pkg_wearable_robot_description, 'launch', 'human_45dof.launch.py'),
         )
     )     
 
