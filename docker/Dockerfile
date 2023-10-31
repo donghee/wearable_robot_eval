@@ -148,6 +148,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     supervisor \
     lxde-core \
     terminator \
+    tilix \
+    tmuxinator \
     mesa-utils \
     libglu1 \
     libsm6 \
@@ -324,3 +326,5 @@ COPY ./ros_entrypoint.sh /
 COPY files/nginx.conf /etc/nginx/sites-enabled/default
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
+
+CMD ["bash"]
