@@ -1,0 +1,283 @@
+<?xml version="1.0"?>
+<robot  xmlns:xacro="http://www.ros.org/wiki/xacro"  name="dumpUrdf">
+  <xacro:include filename="$(find wearable_robot_description)/urdf/human_45dof.gazebo"/>
+
+<xacro:macro name="ball_joint" params="parent child limit effort_limit *origin">
+
+  <link name="${parent}_${child}_link1">
+    <inertial>
+      <mass value="1e-02" />
+      <inertia ixx="1e-02" ixy="0" ixz="0" iyy="1e-02" iyz="0" izz="1e-02" />
+    </inertial>
+  </link>
+
+  <joint name="j_${parent}_${child}_joint1" type="revolute">
+	<xacro:insert_block name="origin"/>
+    <parent link="${parent}"/>
+    <child link="${parent}_${child}_link1"/>
+    <axis xyz="1 0 0" />
+	<limit effort="${effort_limit}" lower="${-limit}" upper="${limit}" velocity="3"/>
+  </joint>
+
+  <link name="${parent}_${child}_link2">
+    <inertial>
+      <mass value="1e-02" />
+      <inertia ixx="1e-02" ixy="0" ixz="0" iyy="1e-02" iyz="0" izz="1e-02" />
+    </inertial>
+	
+	<visual>
+		<geometry>
+			<sphere radius="0.05"  />
+		</geometry>
+		<material name="orange"/>
+	</visual>  
+  </link>
+  
+  <joint name="j_${parent}_${child}_joint2" type="revolute">
+    <parent link="${parent}_${child}_link1"/>
+    <child link="${parent}_${child}_link2"/>
+    <axis xyz="0 1 0" />
+	<limit effort="${effort_limit}" lower="${-limit}" upper="${limit}" velocity="3"/>
+  </joint>
+
+
+  <joint name="j_${parent}_${child}_joint3" type="revolute">
+    <parent link="${parent}_${child}_link2"/>
+    <child link="${child}"/>
+    <axis xyz="0 0 1" />
+	<limit effort="${effort_limit}" lower="${-limit}" upper="${limit}" velocity="3"/>
+  </joint>
+
+</xacro:macro>
+
+<xacro:macro name="sphere_v_c" params="radius *origin">
+	<collision>
+		<xacro:insert_block name="origin"/>
+		<geometry>
+			<sphere radius = "${radius/2}"/>
+		</geometry>
+	</collision>
+	<visual>
+		<xacro:insert_block name="origin"/>
+		<geometry>
+			<sphere radius="${radius/2}"/>
+		</geometry>
+	</visual>
+</xacro:macro>
+
+<xacro:macro name="cylinder_v_c" params="radius length *origin">
+	<collision>
+		<xacro:insert_block name="origin"/>
+		<geometry>
+			<cylinder length="${length*3/4}" radius = "${radius/4}"/>
+		</geometry>
+	</collision>
+	<visual>
+		<xacro:insert_block name="origin"/>
+		<geometry>
+			<cylinder length="${length}" radius="${radius/2}"/>
+		</geometry>
+	</visual>
+</xacro:macro>
+
+<xacro:macro name="box_v_c" params="x y z *origin">
+	<collision>
+		<xacro:insert_block name="origin"/>
+		<geometry>
+			<box size="${x} ${y} ${z}" />
+		</geometry>
+	</collision>
+	<visual>
+		<xacro:insert_block name="origin"/>
+		<geometry>
+			<box size="${x} ${y} ${z}" />
+		</geometry>
+	</visual>
+
+</xacro:macro>
+
+  <link name="world"/>
+  <joint name="world_to_baselink_fixed" type="fixed">
+    <parent link="world" />
+    <child  link = "base_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
+  <xacro:include filename="$(find wearable_robot_description)/urdf/humans/W0001.urdf"/>
+
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+
+    <joint name="j_root_chest_joint1">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_root_chest_joint2">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_root_chest_joint3">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_chest_neck_joint1">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_chest_neck_joint2">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_chest_neck_joint3">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_root_right_hip_joint1">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_root_right_hip_joint2">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_root_right_hip_joint3">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_right_knee">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_right_knee_right_ankle_joint1">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_right_knee_right_ankle_joint2">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_right_knee_right_ankle_joint3">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_chest_right_shoulder_joint1">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_chest_right_shoulder_joint2">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_chest_right_shoulder_joint3">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_right_elbow">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_root_left_hip_joint1">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_root_left_hip_joint2">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_root_left_hip_joint3">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_left_knee">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_left_knee_left_ankle_joint1">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_left_knee_left_ankle_joint2">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_left_knee_left_ankle_joint3">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_chest_left_shoulder_joint1">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_chest_left_shoulder_joint2">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_chest_left_shoulder_joint3">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+    <joint name="j_left_elbow">
+      <command_interface name="position">
+      </command_interface>
+      <state_interface name="position"/>
+    </joint>
+
+  </ros2_control>
+
+</robot>

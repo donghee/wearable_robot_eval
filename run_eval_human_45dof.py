@@ -17,4 +17,8 @@ def kill_process(proc, timeout=10):
 
 # Run simulation
 evaluation_proc = subprocess.Popen(['ros2', 'launch', 'wearable_robot_gazebo', 'evaluation_human_45dof.launch.py'], start_new_session=True)
-kill_process(evaluation_proc, 80)
+#kill_process(evaluation_proc, 15) # test urdf
+#kill_process(evaluation_proc, 80)
+#kill_process(evaluation_proc, 120)
+#  kill_process(evaluation_proc, 20)
+kill_process(evaluation_proc, 30)

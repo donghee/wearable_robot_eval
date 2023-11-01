@@ -16,8 +16,9 @@ from launch.actions import ExecuteProcess
 import xacro
 
 def generate_launch_description():
-    pkg_wearable_robot_path = get_package_share_path('wearable_robot_description')
-    default_model_path = pkg_wearable_robot_path / 'urdf/human_45dof.xacro'
+    #pkg_wearable_robot_path = get_package_share_path('wearable_robot_description')
+    #default_model_path = pkg_wearable_robot_path / 'urdf/human_45dof.xacro'
+    default_model_path = os.path.join(get_package_share_directory('wearable_robot_description'), 'urdf/human_45dof.xacro')
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
     install_dir = get_package_prefix('wearable_robot_description')
 
@@ -74,10 +75,10 @@ def generate_launch_description():
                  "-topic", namespace + "/robot_description",
                  "-entity", robot_name,
                  "-robot_namespace", namespace,
-                 "-x", "0.0",
-                 "-y", "0.0",
-                 "-z", "0.9",
-                 "-Y", "0.0",
+                 "-x", "1.0",
+                 "-y", "1.0",
+                 "-z", "1.0",
+                 "-Y", "-1.5707963267948966",
                  "-unpause",
                  ],
              output='screen'),
@@ -95,10 +96,8 @@ def generate_launch_description():
 
         joint_state_broadcaster_node,
         #joint_trajectory_controller_node,
-        forward_position_controller_node,
+        #forward_position_controller_node,
 
-        #load_joint_state_broadcaster,
-        #load_joint_trajectory_controller,
         launch.actions.TimerAction(
             actions=[launch.actions.LogInfo(msg="휴먼 트윈 생성 완료")],
             period = 4.0

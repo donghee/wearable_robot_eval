@@ -1,0 +1,33 @@
+upper_limb:
+  controller_manager:
+    ros__parameters:
+      update_rate: 1000  # Hz
+      # use_sim_time: true
+  
+      upper_limb_joint_controller:
+        type: joint_trajectory_controller/JointTrajectoryController
+
+      upper_limb_joint_state_broadcaster:
+        type: joint_state_broadcaster/JointStateBroadcaster
+ 
+      upper_limb_forward_position_controller:
+        type: forward_command_controller/ForwardCommandController
+      
+upper_limb_joint_controller:
+  ros__parameters:
+    joints:
+      - arm_joint
+
+    interface_name: position
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+      - velocity
+
+upper_limb_forward_position_controller:
+  ros__parameters:
+    joints:
+      - arm_joint
+    interface_name: position

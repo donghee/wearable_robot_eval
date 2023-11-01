@@ -34,16 +34,16 @@ def generate_launch_description():
         )
     )     
 
-    spawn_eduexo = IncludeLaunchDescription(
+    spawn_upper_limb = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_wearable_robot_description, 'launch', 'eduexo_only.launch.py'),
+            os.path.join(pkg_wearable_robot_description, 'launch', 'upper_limb.launch.py'),
         )
     )     
 
-    test_eduexo_0 = launch_ros.actions.Node(
+    test_upper_limb = launch_ros.actions.Node(
             package='wearable_robot_description',
             #executable=os.path.join(pkg_wearable_robot_description, 'scripts', '1_dof_arm_gazebo_test.py'),
-            executable='eduexo_arm_gazebo_test.py',
+            executable='upper_limb_gazebo_test.py',
             arguments=['-2.8'],
             output='screen',
         )
@@ -52,27 +52,12 @@ def generate_launch_description():
         start_world,
         spawn_human,
         launch.actions.TimerAction(
-            actions=[spawn_eduexo],
-            period = 40.0
-        ),
-        ExecuteProcess(
-            cmd=["ls", "-al"], output="screen"
-        ),
-        #  launch.actions.TimerAction(
-        #      actions=[launch.actions.LogInfo(msg="휴먼 트윈 생성 완료")],
-        #      period = 4.0
-        #  ),
-        launch.actions.TimerAction(
-            actions=[launch.actions.LogInfo(msg="Wait For The Right Arm's Oscillation to Stabilize!")],
+            actions=[spawn_upper_limb],
             period = 5.0
         ),
-        #  launch.actions.TimerAction(
-        #      actions=[launch.actions.LogInfo(msg="상지 웨어러블 디바이스 트윈 불러오기 완료")],
-        #      period = 40.0
-        #  ),
         launch.actions.TimerAction(
-            actions=[test_eduexo_0],
-            period = 45.0
+            actions=[test_upper_limb],
+            period = 10.0
         ),
         launch.actions.TimerAction(
             actions=[launch.actions.LogInfo(msg="상지 동작 수행 완료")],

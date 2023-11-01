@@ -272,11 +272,11 @@
       <state_interface name="position"/>
     </joint>
 
-    <joint name="j_left_elbow">
-      <command_interface name="position">
-      </command_interface>
-      <state_interface name="position"/>
-    </joint>
+    <!-- <joint name="j_left_elbow"> -->
+    <!--   <command_interface name="position"> -->
+    <!--   </command_interface> -->
+    <!--   <state_interface name="position"/> -->
+    <!-- </joint> -->
 
   </ros2_control>
 

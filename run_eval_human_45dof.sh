@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ~/ros2_ws 
-colcon build
+colcon build --symlink-install
 cd ~/ros2_ws/src/wearable_robot_eval
 . ~/ros2_ws/install/setup.bash
 

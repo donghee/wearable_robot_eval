@@ -134,9 +134,9 @@ class Animator(Node):
         left_elbow_rotation = self.quat_to_euler(frame[55],frame[56],frame[57],frame[58])[2]
         
         c.data = [
-            chest_rotation[0],
-            chest_rotation[1],
-            chest_rotation[2],
+            #  chest_rotation[0],
+            #  chest_rotation[1],
+            #  chest_rotation[2],
             neck_rotation[0],
             neck_rotation[1],
             neck_rotation[2],

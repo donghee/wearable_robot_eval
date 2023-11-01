@@ -1,9 +1,9 @@
 forward_position_controller:
   ros__parameters:
     joints:
-      - j_root_chest_joint1
-      - j_root_chest_joint2
-      - j_root_chest_joint3
+      # - j_root_chest_joint1
+      # - j_root_chest_joint2
+      # - j_root_chest_joint3
       - j_chest_neck_joint1
       - j_chest_neck_joint2
       - j_chest_neck_joint3
