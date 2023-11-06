@@ -50,6 +50,8 @@ install(
   launch/spawn_entity_v2.py
   scripts/1_dof_arm_gazebo_test.py
   scripts/eduexo_arm_gazebo_test.py
+  scripts/human_arm_gazebo_effort_test.py
+  scripts/upper_limb_gazebo_effort_test.py
   scripts/upper_limb_gazebo_test.py
   DESTINATION lib/${PROJECT_NAME}
 )

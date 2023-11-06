@@ -1,41 +1,87 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float64MultiArray
 import time
+import math
 
-class EffortTestNode(Node):
+from sensor_msgs.msg import JointState
 
-    def __init__(self):
-        super().__init__('effort_test_node')
-        #  self.publisher_ = self.create_publisher(Float64MultiArray, '/upper_limb_effort_controller/commands', 10)
+class UpperLimbEffortTestNode(Node):
+    def __init__(self, control_type="square_wave"):
+        super().__init__('upper_limb_effort_test_node')
+        self.FREQ = 500
+
+        self.arm_joint_position = 0.0
+        self.joint_state_subscription = self.create_subscription(
+                JointState,
+                'joint_states',
+                self.listener_joint_state_callback,
+                10)
+
+        # initial phase and device torque
+        self.phase = "flexion"
+        self.device_torque = -30.0
+        self.last_valid_device_torque = self.device_torque
+
+        # control type: "square_wave", "square_wave_failed", "zero"
+        self.control_type = control_type
+
         self.publisher_ = self.create_publisher(Float64MultiArray, '/upper_limb_forward_command_controller/commands', 10)
-        self.get_logger().info('node created')
-        
-        commands = Float64MultiArray()
+        self.pid_control_timer = self.create_timer(1.0/self.FREQ, self.pid_control_callback)
 
+        commands = Float64MultiArray()
         commands.data.append(100.0)
 
-        #  self.publisher_.publish(commands)
-        #  time.sleep(1)
+    def listener_joint_state_callback(self, msg):
+        if msg.name == ['arm_joint']:
+            self.arm_joint_position = -msg.position[0] - math.radians(90.0)
 
-        for i in range(1000):
-            commands.data[0] = 100.0
-            self.publisher_.publish(commands)
-            time.sleep(0.1)
+    def square_wave_torque_control(self):
+        if self.phase == "extension":
+            if self.arm_joint_position < (math.radians(0.0) - 0.01):
+                self.device_torque = -30.0
+                self.last_valid_device_torque = self.device_torque
+                self.phase = "flexion"
+        elif self.phase == "flexion":
+            if self.arm_joint_position > (math.radians(90.0) + 0.01):
+                self.device_torque = 30.0
+                self.last_valid_device_torque = self.device_torque
+                self.phase = "extension"
 
-            commands.data[0] = -100.0
-            self.publisher_.publish(commands)
-            time.sleep(0.1)
+    def square_wave_torque_failed_control(self):
+        self.square_wave_torque_control()
 
-        #  commands.data[0] = 0.0
-        #  self.publisher_.publish(commands)
-        #  time.sleep(1)
-        
+        # omit the device torque when the arm joint is in the range of 45 to 60 degrees
+        if math.radians(45.0) < self.arm_joint_position and self.arm_joint_position < math.radians(60.0):
+            self.device_torque = 0.0
+        else:
+            self.device_torque = self.last_valid_device_torque
+
+    def zero_torque_control(self):
+        self.square_wave_torque_control()
+        self.device_torque = 0
+
+    def pid_control_callback(self):
+        if self.control_type == "square_wave":
+            self.square_wave_torque_control()
+        elif self.control_type == "square_wave_failed":
+            self.square_wave_torque_failed_control()
+        elif self.control_type == "zero":
+            self.zero_torque_control()
+
+        print(f"{self.phase}: {self.arm_joint_position}, {self.device_torque} ")
+
+        # publish device torque
+        commands = Float64MultiArray()
+        commands.data.append(self.device_torque)
+        self.publisher_.publish(commands)
+
 def main(args=None):
     rclpy.init(args=args)
 
-    effort_test_node = EffortTestNode()
+    effort_test_node = UpperLimbEffortTestNode(control_type="square_wave")
 
     rclpy.spin(effort_test_node)
     effort_test_node.destroy_node()
@@ -43,4 +89,3 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
-

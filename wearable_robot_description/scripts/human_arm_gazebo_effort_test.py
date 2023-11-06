@@ -65,7 +65,7 @@ class HumanArmEffortTestNode(Node):
     def listener_joint_state_callback(self, msg):
         if msg.name == ['j_left_elbow']:
             self.arm_joint_position = msg.position[0]
-            #  self.get_logger().info(f'Received joint states: {self.arm_joint_position}')
+            self.get_logger().info(f'Received joint states: {self.arm_joint_position}')
 
     def pid_control_callback(self):
         # triangle wave motion's pid
