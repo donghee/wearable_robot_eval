@@ -125,7 +125,8 @@
                 <parent link="chest"/>
                 <child link="chest_neck_link1"/>
                 <axis xyz="1 0 0"/>
-                <limit effort="50" lower="-1" upper="1" velocity="3"/>
+                <!-- <limit effort="50" lower="-1" upper="1" velocity="3"/> -->
+                <limit effort="50" lower="-0.01" upper="0.01" velocity="3"/>
             </joint>
             <link name="chest_neck_link2">
                 <inertial>
@@ -149,7 +150,8 @@
                 <parent link="chest_neck_link2"/>
                 <child link="neck"/>
                 <axis xyz="0 0 1"/>
-                <limit effort="50" lower="-1" upper="1" velocity="3"/>
+                <!-- <limit effort="50" lower="-1" upper="1" velocity="3"/> -->
+                <limit effort="50" lower="-0.01" upper="0.01" velocity="3"/>
             </joint>
             <link name="right_hip">
                 <inertial>
