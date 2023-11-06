@@ -15,3 +15,5 @@ rm -rf install bulid log
 
 colcon build 
 source ~/ros2_ws/install/setup.bash
+
+exec "$@"

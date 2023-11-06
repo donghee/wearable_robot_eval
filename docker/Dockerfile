@@ -320,6 +320,8 @@ COPY files/nginx.conf /etc/nginx/sites-available/default
 RUN sudo chown -R $USER:$USER $HOME
 
 COPY ./bootstrap.sh /
+# dev enviroments
+COPY ./dev_bootstrap.sh /
 COPY ./ros_entrypoint.sh /
 
 # nginx
