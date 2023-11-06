@@ -10,7 +10,7 @@ upper_limb:
       upper_limb_joint_state_broadcaster:
         type: joint_state_broadcaster/JointStateBroadcaster
  
-      upper_limb_forward_position_controller:
+      upper_limb_forward_command_controller:
         type: forward_command_controller/ForwardCommandController
       
 upper_limb_joint_controller:
@@ -26,8 +26,16 @@ upper_limb_joint_controller:
       - position
       - velocity
 
-upper_limb_forward_position_controller:
+upper_limb_forward_command_controller:
   ros__parameters:
     joints:
       - arm_joint
-    interface_name: position
+    interface_name: effort
+    command_interfaces:
+      - effort
+
+    state_interfaces:
+      - position
+      - velocity
+      - effort
+

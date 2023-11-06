@@ -63,13 +63,22 @@ def generate_launch_description():
         output="screen",
     )
 
-    upper_limb_forward_position_controller_node = Node(
+    #  upper_limb_effort_controller_node = Node(
+    #      package="controller_manager",
+    #      executable="spawner.py",
+    #      namespace=namespace,
+    #      arguments=["upper_limb_effort_controller", "-c", namespace+"/controller_manager"],
+    #      output="screen",
+    #  )
+
+    upper_limb_forward_command_controller_node = Node(
         package="controller_manager",
         executable="spawner.py",
         namespace=namespace,
-        arguments=["upper_limb_forward_position_controller", "-c", namespace+"/controller_manager"],
+        arguments=["upper_limb_forward_command_controller", "-c", namespace+"/controller_manager"],
         output="screen",
     )
+
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -108,8 +117,9 @@ def generate_launch_description():
 
         #joint_state_publisher_node,
         joint_state_broadcaster_node,
-        joint_trajectory_controller_node,
-        #upper_limb_forward_position_controller_node,
+        #joint_trajectory_controller_node,
+        #upper_limb_effort_controller_node,
+        upper_limb_forward_command_controller_node,
         launch.actions.TimerAction(
             actions=[launch.actions.LogInfo(msg="상지 웨어러블 디바이스 트윈 불러오기 완료")],
             period = 4.0
