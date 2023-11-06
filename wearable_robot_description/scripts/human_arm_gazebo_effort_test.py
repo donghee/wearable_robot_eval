@@ -1,4 +1,5 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Float64MultiArray
@@ -7,31 +8,16 @@ import math
 
 from sensor_msgs.msg import JointState
 
-class EffortTestNode(Node):
+class HumanArmEffortTestNode(Node):
 
     def __init__(self):
-        super().__init__('effort_test_node')
-        # init reference motion
+        super().__init__('human_arm_effort_test_node')
         self.reference_motions_one_cycle = []
-        self.reference_motion_x = 0.0
         self.cnt = 0
         self.FREQ = 500
 
-        # triangle wave
-        #  for i in range(self.FREQ*2*2):
-        #      # flextion
-        #      if i < self.FREQ*2:
-        #          self.reference_motion_x += 90/(self.FREQ*2)
-        #      # extension
-        #      else:
-        #          self.reference_motion_x -= 90/(self.FREQ*2)
-        #      self.reference_motions_one_cycle.append(math.radians(self.reference_motion_x))
-        #      #  self.reference_motions_one_cycle.append(self.reference_motion_x)
-        #  print(self.reference_motions_one_cycle)
-
-        # sine wave
-        for i in range(self.FREQ*2*2):
-            self.reference_motions_one_cycle.append(math.sin(2.0 * math.pi * i / (self.FREQ*2*2*2.0)))
+        self.reference_motions_one_cycle = self.init_reference_motion("sine")
+        #  self.reference_motions_one_cycle = self.init_reference_motion("triangle")
 
         # current arm joint angle
         self.arm_joint_position = 0.0
@@ -50,14 +36,31 @@ class EffortTestNode(Node):
         self.error_prev = 0.0
 
         self.publisher_ = self.create_publisher(Float64MultiArray, '/forward_command_controller/commands', 10)
-        self.get_logger().info('node created')
-        
         self.pid_control_timer = self.create_timer(1.0/self.FREQ, self.pid_control_callback)
 
-        # init torque command:
-        # left elbow angle
+        # init torque command of left elbow joint
         commands = Float64MultiArray()
         commands.data.append(100.0)
+
+    def init_reference_motion(self, motion_type):
+        x = 0.0
+        reference_motions = []
+
+        if motion_type == 'triangle':
+            # triangle wave
+            for i in range(self.FREQ*2*2):
+                if i < self.FREQ*2:
+                    x += 90/(self.FREQ*2) # flextion
+                else:
+                    x -= 90/(self.FREQ*2) # extension
+                reference_motions.append(math.radians(x))
+
+        if motion_type == 'sine':
+            # sine wave
+            for i in range(self.FREQ*2*2):
+                reference_motions.append(math.sin(2.0 * math.pi * i / (self.FREQ*2*2*2.0)))
+
+        return reference_motions
 
     def listener_joint_state_callback(self, msg):
         if msg.name == ['j_left_elbow']:
@@ -65,13 +68,13 @@ class EffortTestNode(Node):
             #  self.get_logger().info(f'Received joint states: {self.arm_joint_position}')
 
     def pid_control_callback(self):
-        # triangle reference pid
+        # triangle wave motion's pid
         kP = 20.0
         kI = 0.02
         kD = 0.2
         C = 0.0
 
-        # sinewave reference pid
+        # sine wave motion's pid
         kP = 20.0
         kI = 0.15
         kD = 0.2
@@ -83,7 +86,7 @@ class EffortTestNode(Node):
             self.publisher_.publish(commands)
             return
 
-        self.error = self.arm_joint_position - self.reference_motions_one_cycle[self.cnt % (self.FREQ*2*2)] 
+        self.error = self.arm_joint_position - self.reference_motions_one_cycle[self.cnt % (self.FREQ*2*2)]
         self.error_cum += self.error
         error_diff = self.error - self.error_prev
         self.error_prev = self.error
@@ -103,7 +106,7 @@ class EffortTestNode(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    effort_test_node = EffortTestNode()
+    effort_test_node = HumanArmEffortTestNode()
 
     rclpy.spin(effort_test_node)
     effort_test_node.destroy_node()
