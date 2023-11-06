@@ -54,11 +54,11 @@ def generate_launch_description():
         output="screen",
     )
 
-    forward_position_controller_node = Node(
+    forward_command_controller_node = Node(
         package="controller_manager",
         executable="spawner.py",
         namespace=namespace,
-        arguments=["forward_position_controller", "-c", namespace+"/controller_manager"],
+        arguments=["forward_command_controller", "-c", namespace+"/controller_manager"],
         output="screen",
     )
 
@@ -96,7 +96,7 @@ def generate_launch_description():
 
         joint_state_broadcaster_node,
         #joint_trajectory_controller_node,
-        #forward_position_controller_node,
+        forward_command_controller_node,
 
         launch.actions.TimerAction(
             actions=[launch.actions.LogInfo(msg="휴먼 트윈 생성 완료")],
