@@ -633,13 +633,15 @@
                 <parent link="chest_left_shoulder_link1"/>
                 <child link="chest_left_shoulder_link2"/>
                 <axis xyz="0 1 0"/>
-                <limit effort="100" lower="-3.14" upper="3.14" velocity="3"/>
+                <!-- <limit effort="100" lower="-3.14" upper="3.14" velocity="3"/> -->
+                <limit effort="100" lower="-0.01" upper="0.01" velocity="3"/>
             </joint>
             <joint name="j_chest_left_shoulder_joint3" type="revolute">
                 <parent link="chest_left_shoulder_link2"/>
                 <child link="left_shoulder"/>
                 <axis xyz="0 0 1"/>
-                <limit effort="100" lower="-3.14" upper="3.14" velocity="3"/>
+                <!-- <limit effort="100" lower="-3.14" upper="3.14" velocity="3"/> -->
+                <limit effort="100" lower="-0.01" upper="0.01" velocity="3"/>
             </joint>
             <link name="left_elbow">
                 <inertial>
