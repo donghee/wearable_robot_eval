@@ -666,6 +666,7 @@
                 <parent link="left_shoulder"/>
                 <child link="left_elbow"/>
                 <limit effort="60.0" lower="0" upper="3.14" velocity="0.5"/>
+                <dynamics damping="1.0" friction="1.0"/>
                 <origin rpy="0 0 0" xyz="0.000000 -0.36 0.000000"/>
                 <axis xyz="0.000000 0.000000 1.000000"/>
             </joint>
