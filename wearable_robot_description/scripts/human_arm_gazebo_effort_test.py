@@ -48,7 +48,7 @@ class HumanArmEffortTestNode(Node):
 
         if motion_type == 'triangle':
             # triangle wave
-            for i in range(self.FREQ*2*2):
+            for i in range(self.FREQ*2*2): # flexion and extension
                 if i < self.FREQ*2:
                     x += 90/(self.FREQ*2) # flextion
                 else:
@@ -65,7 +65,7 @@ class HumanArmEffortTestNode(Node):
     def listener_joint_state_callback(self, msg):
         if msg.name == ['j_left_elbow']:
             self.arm_joint_position = msg.position[0]
-            self.get_logger().info(f'Received joint states: {self.arm_joint_position}')
+            #  self.get_logger().info(f'Received joint states: {self.arm_joint_position}')
 
     def pid_control_callback(self):
         # triangle wave motion's pid
@@ -84,6 +84,7 @@ class HumanArmEffortTestNode(Node):
             commands = Float64MultiArray()
             commands.data.append(0.0)
             self.publisher_.publish(commands)
+            print(f"stopped! reference motion: {self.arm_joint_position}, {0.0} ")
             return
 
         self.error = self.arm_joint_position - self.reference_motions_one_cycle[self.cnt % (self.FREQ*2*2)]
@@ -99,18 +100,32 @@ class HumanArmEffortTestNode(Node):
         commands.data.append(-human_torque)
         self.publisher_.publish(commands)
 
+        # logging
+        phase = "flexion" if self.cnt % (self.FREQ*2*2) < self.FREQ*2 else "extension"
+        print(f"human {phase}: {self.arm_joint_position}, {-human_torque} ")
+       
         #  print("i: %d" % (self.cnt % (self.FREQ*2*2)))
         #  print("r_motion: %f" % self.reference_motions_one_cycle[self.cnt % (self.FREQ*2*2)])
         self.cnt += 1
+
+    def reset_torque(self):
+        commands = Float64MultiArray()
+        commands.data.append(0.0)
+        self.publisher_.publish(commands)
 
 def main(args=None):
     rclpy.init(args=args)
 
     effort_test_node = HumanArmEffortTestNode()
 
-    rclpy.spin(effort_test_node)
-    effort_test_node.destroy_node()
-    rclpy.shutdown()
+    try:    
+        rclpy.spin(effort_test_node)
+    except KeyboardInterrupt:
+        print("KeyboardInterrupt")
+        effort_test_node.reset_torque()
+    finally:
+        effort_test_node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

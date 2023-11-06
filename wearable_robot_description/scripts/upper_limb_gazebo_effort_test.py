@@ -12,6 +12,7 @@ class UpperLimbEffortTestNode(Node):
     def __init__(self, control_type="square_wave"):
         super().__init__('upper_limb_effort_test_node')
         self.FREQ = 500
+        self.DEFAULT_DEVICE_TORQUE = 30.0
 
         self.arm_joint_position = 0.0
         self.joint_state_subscription = self.create_subscription(
@@ -22,7 +23,7 @@ class UpperLimbEffortTestNode(Node):
 
         # initial phase and device torque
         self.phase = "flexion"
-        self.device_torque = -30.0
+        self.device_torque = -self.DEFAULT_DEVICE_TORQUE
         self.last_valid_device_torque = self.device_torque
 
         # control type: "square_wave", "square_wave_failed", "zero"
@@ -41,12 +42,12 @@ class UpperLimbEffortTestNode(Node):
     def square_wave_torque_control(self):
         if self.phase == "extension":
             if self.arm_joint_position < (math.radians(0.0) - 0.01):
-                self.device_torque = -30.0
+                self.device_torque = -self.DEFAULT_DEVICE_TORQUE
                 self.last_valid_device_torque = self.device_torque
                 self.phase = "flexion"
         elif self.phase == "flexion":
             if self.arm_joint_position > (math.radians(90.0) + 0.01):
-                self.device_torque = 30.0
+                self.device_torque = self.DEFAULT_DEVICE_TORQUE
                 self.last_valid_device_torque = self.device_torque
                 self.phase = "extension"
 
@@ -71,11 +72,16 @@ class UpperLimbEffortTestNode(Node):
         elif self.control_type == "zero":
             self.zero_torque_control()
 
-        print(f"{self.phase}: {self.arm_joint_position}, {self.device_torque} ")
-
         # publish device torque
         commands = Float64MultiArray()
         commands.data.append(self.device_torque)
+        self.publisher_.publish(commands)
+
+        print(f"device {self.phase}: {self.arm_joint_position}, {self.device_torque} ")
+
+    def reset_torque(self):
+        commands = Float64MultiArray()
+        commands.data.append(0.0)
         self.publisher_.publish(commands)
 
 def main(args=None):
@@ -83,9 +89,14 @@ def main(args=None):
 
     effort_test_node = UpperLimbEffortTestNode(control_type="square_wave")
 
-    rclpy.spin(effort_test_node)
-    effort_test_node.destroy_node()
-    rclpy.shutdown()
+    try:    
+        rclpy.spin(effort_test_node)
+    except KeyboardInterrupt:
+        print("KeyboardInterrupt")
+        effort_test_node.reset_torque()
+    finally:
+        effort_test_node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
