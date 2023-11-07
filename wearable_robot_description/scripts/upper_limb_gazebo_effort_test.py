@@ -12,7 +12,8 @@ class UpperLimbEffortTestNode(Node):
     def __init__(self, control_type="square_wave"):
         super().__init__('upper_limb_effort_test_node')
         self.FREQ = 500
-        self.DEFAULT_DEVICE_TORQUE = 30.0
+        self.DEVICE_FLEXION_TORQUE = 5.0
+        self.DEVICE_EXTENSION_TORQUE = 1.0
 
         self.arm_joint_position = 0.0
         self.joint_state_subscription = self.create_subscription(
@@ -23,14 +24,14 @@ class UpperLimbEffortTestNode(Node):
 
         # initial phase and device torque
         self.phase = "flexion"
-        self.device_torque = -self.DEFAULT_DEVICE_TORQUE
+        self.device_torque = -self.DEVICE_FLEXION_TORQUE
         self.last_valid_device_torque = self.device_torque
 
         # control type: "square_wave", "square_wave_failed", "zero"
         self.control_type = control_type
 
         self.publisher_ = self.create_publisher(Float64MultiArray, '/upper_limb_forward_command_controller/commands', 10)
-        self.pid_control_timer = self.create_timer(1.0/self.FREQ, self.pid_control_callback)
+        self.control_timer = self.create_timer(1.0/self.FREQ, self.control_callback)
 
         commands = Float64MultiArray()
         commands.data.append(100.0)
@@ -41,13 +42,13 @@ class UpperLimbEffortTestNode(Node):
 
     def square_wave_torque_control(self):
         if self.phase == "extension":
-            if self.arm_joint_position < (math.radians(0.0) - 0.01):
-                self.device_torque = -self.DEFAULT_DEVICE_TORQUE
+            if self.arm_joint_position < (math.radians(0.0) + 0.04):
+                self.device_torque = -self.DEVICE_FLEXION_TORQUE
                 self.last_valid_device_torque = self.device_torque
                 self.phase = "flexion"
         elif self.phase == "flexion":
-            if self.arm_joint_position > (math.radians(90.0) + 0.01):
-                self.device_torque = self.DEFAULT_DEVICE_TORQUE
+            if self.arm_joint_position > (math.radians(90.0) - 0.10):
+                self.device_torque = self.DEVICE_EXTENSION_TORQUE
                 self.last_valid_device_torque = self.device_torque
                 self.phase = "extension"
 
@@ -64,7 +65,7 @@ class UpperLimbEffortTestNode(Node):
         self.square_wave_torque_control()
         self.device_torque = 0
 
-    def pid_control_callback(self):
+    def control_callback(self):
         if self.control_type == "square_wave":
             self.square_wave_torque_control()
         elif self.control_type == "square_wave_failed":
@@ -88,6 +89,8 @@ def main(args=None):
     rclpy.init(args=args)
 
     effort_test_node = UpperLimbEffortTestNode(control_type="square_wave")
+    #effort_test_node = UpperLimbEffortTestNode(control_type="square_wave_failed")
+    #effort_test_node = UpperLimbEffortTestNode(control_type="zero")
 
     try:    
         rclpy.spin(effort_test_node)

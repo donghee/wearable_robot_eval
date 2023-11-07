@@ -19,7 +19,7 @@
           <mesh filename="$(find wearable_robot_description)/meshes/upper_limb/arm_link.dae" scale="0.001 0.001 0.001"/> 
         </geometry> 
         <!-- <origin rpy="0 0 -1.570796" xyz="0.0 0 0.0"/>  -->
-        <origin rpy="-3.141592 -1.570706 0" xyz="0.1 -0.05 0.00"/>
+        <origin rpy="-3.141592 -1.570796 0" xyz="0.1 -0.05 0.00"/>
         <material name="blue"> 
           <color rgba="0 0 1 1"/> 
         </material> 
@@ -35,8 +35,8 @@
         <child link="forearm_link"/>
         <origin xyz="0 0 0.1575"/>
         <axis xyz="0 0 0" />
-        <limit effort="300" velocity="0.1" lower="-4.1" upper="-1.5"/>
-        <dynamics damping="50" friction="1"/>
+        <limit effort="500" velocity="100" lower="-4.1" upper="-1.570796"/>
+        <dynamics damping="1" friction="1"/>
     </joint>
 
     <link name="forearm_link">
@@ -67,18 +67,17 @@
       <visual>
         <geometry>
           <!-- <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.03 0.03 0.01"/> -->
-          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.052 0.052 0.01"/>
+          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.050 0.050 0.01"/>
         </geometry>
-        <!-- <origin rpy="1.570796 1.570796 0" xyz="0.05 -0.025 0.0"/> -->
-        <origin rpy="1.570796 1.570796 0" xyz="-0.0250 -0.025 0.0"/>
+        <!-- <origin rpy="1.570796 1.570796 0" xyz="0.0 -0.025 0.0"/> -->
+        <origin rpy="1.570796 1.570796 0" xyz="-0.0050 -0.025 0.0"/>
       </visual>
       <collision>
         <geometry>
-          <!-- <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.03 0.03 0.01"/> -->
-          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.052 0.052 0.01"/>
+          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.060 0.050 0.01"/>
         </geometry>
-        <!-- <origin rpy="1.570796 1.570796 0" xyz="0.05 -0.025 0.0"/> -->
-        <origin rpy="1.570796 1.570796 0" xyz="-0.0250 -0.025 0.0"/>
+        <!-- <origin rpy="1.570796 1.570796 0" xyz="0.0 -0.025 0.0"/> -->
+        <origin rpy="1.570796 1.570796 0" xyz="-0.0050 -0.025 0.0"/>
       </collision>
  
       <inertial>
@@ -97,35 +96,32 @@
     <link name="arm_band_link">     
       <visual>
         <geometry>
-          <!-- <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.0295 0.0295 0.01"/> -->
-          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.05 0.05 0.01"/>
+          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.05 0.05 0.02"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0.05 0.01 0.02"/>
+          <!-- <origin rpy="0 0 0" xyz="0.05 0.01 0.02"/> --> <!-- x up dir, y left dir, z is z dir -->
+        <origin rpy="0 0 0" xyz="0.06 0.049 0.005"/> 
       </visual>
 
-      <!-- <collision> -->
-      <!--   <geometry> -->
-      <!--     [> <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.0295 0.0295 0.01"/> <] -->
-      <!--     <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.07 0.07 0.01"/> -->
-      <!--   </geometry> -->
-      <!--   <origin rpy="0 0 0" xyz="0.05 0.01 0.02"/> -->
-      <!-- </collision> -->
+      <collision>
+        <geometry>
+          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.045 0.045 0.02"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.06 0.049 0.005"/> 
+      </collision>
 
       <visual>
         <geometry>
-          <!-- <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.0295 0.0295 0.01"/> -->
-          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.05 0.05 0.01"/>
+          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.05 0.05 0.02"/>
         </geometry>
-        <origin rpy="0 0 0" xyz="0.05 0.01 -0.07"/>
+        <origin rpy="0 0 0" xyz="0.06 0.049 -0.05"/>
       </visual>
 
-      <!-- <collision> -->
-      <!--   <geometry> -->
-      <!--     [> <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.0295 0.0295 0.01"/> <] -->
-      <!--     <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.07 0.07 0.01"/> -->
-      <!--   </geometry> -->
-      <!--   <origin rpy="0 0 0" xyz="0.05 0.01 -0.07"/> -->
-      <!-- </collision> -->
+      <collision>
+        <geometry>
+          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.045 0.045 0.02"/>
+        </geometry>
+        <origin rpy="0 0 0" xyz="0.06 0.049 -0.05"/>
+      </collision>
 
       <inertial>
         <mass value="0.001"/>
@@ -237,7 +233,7 @@
         <param name="max">+300.0</param>
       </command_interface>
       <state_interface name="position">
-	      <param name="initial_value">1.57079</param>          
+	      <param name="initial_value">1.570796</param>          
       </state_interface>
       <state_interface name="velocity"/>
       <state_interface name="effort"/>

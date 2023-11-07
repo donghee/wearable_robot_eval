@@ -10,6 +10,12 @@
     </plugin>
   </gazebo>
 
+  <gazebo reference="left_shoulder">
+    <mu1>Inf</mu1>
+    <mu2>Inf</mu2>
+    <material>Gazebo/Orange</material>
+  </gazebo>
+
   <gazebo reference="left_hip">
     <gravity>false</gravity>
     <material>Gazebo/Orange</material>

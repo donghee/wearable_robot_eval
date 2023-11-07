@@ -7,6 +7,7 @@ import time
 import math
 
 from sensor_msgs.msg import JointState
+from geometry_msgs.msg import WrenchStamped
 
 class HumanArmEffortTestNode(Node):
 
@@ -42,6 +43,16 @@ class HumanArmEffortTestNode(Node):
         commands = Float64MultiArray()
         commands.data.append(100.0)
 
+        # read device torque
+        self.device_torques = []
+        self.filtered_device_torque = 0.0
+
+        self.wrench_subscription = self.create_subscription(
+                WrenchStamped,
+                '/upper_limb/wrench',
+                self.listener_upper_limb_wrench_callback,
+                10)
+
     def init_reference_motion(self, motion_type):
         x = 0.0
         reference_motions = []
@@ -58,7 +69,7 @@ class HumanArmEffortTestNode(Node):
         if motion_type == 'sine':
             # sine wave
             for i in range(self.FREQ*2*2):
-                reference_motions.append(math.sin(2.0 * math.pi * i / (self.FREQ*2*2*2.0)))
+                reference_motions.append(math.pi/2*math.sin(2.0 * math.pi * i / (self.FREQ*2*2*2.0)))
 
         return reference_motions
 
@@ -67,6 +78,18 @@ class HumanArmEffortTestNode(Node):
             self.arm_joint_position = msg.position[0]
             #  self.get_logger().info(f'Received joint states: {self.arm_joint_position}')
 
+    def listener_upper_limb_wrench_callback(self, msg):
+        #self.get_logger().info(f'Received upper_limb torque: {msg.wrench.torque}')
+        self.device_torques.append(msg.wrench.torque.x)
+        #print(self.device_torques)
+
+        if len(self.device_torques) > 750: # window size 750. 1.5 sec delayed
+            self.device_torques.pop(0)
+
+        self.filtered_device_torque = sum(self.device_torques) / len(self.device_torques)
+        #print(f"self.filtered_device_torque: {self.filtered_device_torque}")
+
+
     def pid_control_callback(self):
         # triangle wave motion's pid
         kP = 20.0
@@ -74,10 +97,16 @@ class HumanArmEffortTestNode(Node):
         kD = 0.2
         C = 0.0
 
-        # sine wave motion's pid
+        # sine wave motion's pid: no wearable
         kP = 20.0
         kI = 0.15
         kD = 0.2
+        C = 0.0
+
+        # sine wave motion's pid: with wearable device
+        kP = 40.0
+        kI = 0.15
+        kD = 20.0
         C = 0.0
 
         if self.cnt > self.FREQ*2*2 * 10:
@@ -87,7 +116,8 @@ class HumanArmEffortTestNode(Node):
             print(f"stopped! reference motion: {self.arm_joint_position}, {0.0} ")
             return
 
-        self.error = self.arm_joint_position - self.reference_motions_one_cycle[self.cnt % (self.FREQ*2*2)]
+        current_reference_position = self.reference_motions_one_cycle[self.cnt % (self.FREQ*2*2)] 
+        self.error = self.arm_joint_position - current_reference_position
         self.error_cum += self.error
         error_diff = self.error - self.error_prev
         self.error_prev = self.error
@@ -97,15 +127,18 @@ class HumanArmEffortTestNode(Node):
 
         # publish human torque
         commands = Float64MultiArray()
+
+        # with external torque 
+        # TODO: check the direction of torque
+        human_torque = human_torque - self.filtered_device_torque
+
         commands.data.append(-human_torque)
         self.publisher_.publish(commands)
 
         # logging
         phase = "flexion" if self.cnt % (self.FREQ*2*2) < self.FREQ*2 else "extension"
-        print(f"human {phase}: {self.arm_joint_position}, {-human_torque} ")
+        print(f"human {phase}: {round(math.degrees(current_reference_position),1)}, {round(math.degrees(self.arm_joint_position),1)}, {-human_torque} ")
        
-        #  print("i: %d" % (self.cnt % (self.FREQ*2*2)))
-        #  print("r_motion: %f" % self.reference_motions_one_cycle[self.cnt % (self.FREQ*2*2)])
         self.cnt += 1
 
     def reset_torque(self):
