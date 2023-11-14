@@ -53,6 +53,7 @@ install(
   scripts/human_arm_gazebo_effort_test.py
   scripts/upper_limb_gazebo_effort_test.py
   scripts/upper_limb_gazebo_test.py
+  scripts/human_motion_csv_gz_toz_export.py
   DESTINATION lib/${PROJECT_NAME}
 )
 

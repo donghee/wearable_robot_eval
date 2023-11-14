@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3.8
 
 import rclpy
 from rclpy.node import Node
@@ -68,27 +68,24 @@ class Animator(Node):
     def __init__(self):
         super().__init__('animator')
 
-        self.in_dir = self.declare_parameter("in_dir", "./motions").value
-        self.out_dir = self.declare_parameter("out_dir", "./motions/converted").value
+        #  self.in_dir = self.declare_parameter("in_dir", "./motions").value
         self.speed = self.declare_parameter("speed", 0.005).value
-        self.store_converted = self.declare_parameter("store_converted", False).value
+        #self.store_converted = self.declare_parameter("store_converted", False).value
 
-        self.files = []
-        file_query = os.path.join(self.in_dir, "*.txt")
-        for file in glob.glob(file_query):
-            self.files.append(file)
-            print(file)
-        self.current_file_index = 0
-        self.file_count = len(self.files)
+        #self.files = []
+        #file_query = os.path.join(self.in_dir, "human_controller*.txt")
+        #motion_file = os.path.join("/tmp", "human_controller1_normal.txt")
+        self.motion_file = "/tmp/human_controller1_normal.txt"
 
         self.tf_broadcaster = tf2_ros.TransformBroadcaster(self)
 
         qos_profile = QoSProfile(depth=10)
         self.commands = self.create_publisher(Float64MultiArray, '/forward_position_controller/commands', qos_profile)
 
-        self.load_next_json()
+        #self.load_next_json()
+        self.load_json()
 
-        with open('/tmp/toz.csv', 'w', newline='') as file:
+        with open('/tmp/lower.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([
                 "Chest_x", "Chest_y", "Chest_z",
@@ -102,29 +99,17 @@ class Animator(Node):
                 "Lknee_z",
                 "Lankle_x", "Lankle_y" , "Lankle_z",
                 "Lshoulder_x", "Lshoulder_y", "Lshoulder_z",
-                "Lelbow_z"
+                "Lelbow_z",
+                "Safety_Score"
             ])
 
-    def load_next_json(self):
-        path = self.files[self.current_file_index]
-
-        with open(path) as f:
+    def load_json(self):
+        with open(self.motion_file) as f:
             lines = f.read()
 
         self.obj = json.loads(lines)
         self.num_frames = len(self.obj['Frames'])
-        self.obj['converted'] = []
-        self.obj['file_path'] = path
-
-        dir_name, file_name = os.path.split(path)
-        self.obj['save_path'] = os.path.join(self.out_dir, file_name)
-        self.obj['source_name'] = file_name
-        #print(list(map(sum, zip(*self.obj['Frames'])))[0])
-        self.obj['duration_in_seconds'] = list(map(sum, zip(*self.obj['Frames'])))[0]
-
-        self.get_logger().info("Loaded file %s with %i Frames" % (path, self.num_frames))
-
-        self.current_file_index += 1
+        self.get_logger().info("Loaded file %s with %i Frames" % (self.motion_file, self.num_frames))
 
     def quat_to_euler(self, w,x,y,z):
         q = []
@@ -162,7 +147,7 @@ class Animator(Node):
             right_hip_rotation[0],
             right_hip_rotation[1],
             right_hip_rotation[2],
-            right_knee_rotation,
+            right_knee_rotation - math.radians(10), # TODO: change model's axis direction
             right_ankle_rotation[0],
             right_ankle_rotation[1],
             right_ankle_rotation[2],
@@ -173,7 +158,7 @@ class Animator(Node):
             left_hip_rotation[0],
             left_hip_rotation[1],
             left_hip_rotation[2],
-            left_knee_rotation,
+            left_knee_rotation + math.radians(60.0), # TODO: change model's axis direction
             left_ankle_rotation[0],
             left_ankle_rotation[1],
             left_ankle_rotation[2],
@@ -200,53 +185,23 @@ class Animator(Node):
         t.transform.rotation.z = frame[5]
         return t
 
-    def store_frame(self, frame, t, s, transform):
-        pos = transform.transform.translation
-        rot = transform.transform.rotation
-        
-        arr = [
-            frame[0],
-            pos.x,
-            pos.y,
-            pos.z,
-            rot.x,
-            rot.y,
-            rot.z,
-            rot.w
-        ]
-
-        arr.extend(s.position)
-
-        self.obj['converted'].append(arr)
-
-    def store_current(self):
-        if not self.store_converted:
-            return
-
-        self.obj['Frames'] = None
-        json_string = json.dumps(self.obj)
-        with open(self.obj['save_path'], "w") as f:
-            f.write(json_string)
-        
-        self.get_logger().info("Saving to %s" % self.obj['save_path'])
-
     def process_frame(self, t):
         frame = self.obj['Frames'][t]
 
         c = self.get_joint_commands(frame)
 
-        with open('/tmp/toz.csv', 'a', newline='') as file:
+        with open('/tmp/lower.csv', 'a', newline='') as file:
             writer = csv.writer(file)
             data_row = [round(math.degrees(x), 2) for x in c.data]
+            data_row.append(0.25) # safe score
             writer.writerow(data_row)
         
         tr = self.get_robot_base_pose(frame)
         self.commands.publish(c)
         self.tf_broadcaster.sendTransform(tr)
 
-        #self.store_frame(frame, t, s, tr)
-
         return frame[0]
+
     def spin_once(self):
         counter = 0
         self.process_frame(counter)
@@ -262,13 +217,7 @@ class Animator(Node):
                 counter += 1
 
                 if counter == self.num_frames:
-                    self.store_current()
                     stop = True
-
-            if self.file_count - 1 > self.current_file_index:
-                self.load_next_json()
-                counter = 0
-                stop = False
             else:
                 self.get_logger().info("Finished with all files")
                 break
