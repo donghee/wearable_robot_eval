@@ -31,5 +31,5 @@ def csv2json(csv_file, json_file):
 
 
 csv2json('human_controller1_normal.txt', '../human_controller1_normal.txt')
-#csv2json('human_controller2_torqueLimit.txt', '../human_controller2_torqueLimit.txt')
-#csv2json('human_controller3_romLimit.txt', '../human_controller3_romLimit.txt')
+csv2json('human_controller2_torqueLimit.txt', '../human_controller2_torqueLimit.txt')
+csv2json('human_controller3_romLimit.txt', '../human_controller3_romLimit.txt')

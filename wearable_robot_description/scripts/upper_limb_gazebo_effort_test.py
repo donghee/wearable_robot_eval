@@ -11,7 +11,7 @@ from sensor_msgs.msg import JointState
 from geometry_msgs.msg import WrenchStamped
 
 class UpperLimbEffortTestNode(Node):
-    def __init__(self, control_type="square_wave"):
+    def __init__(self):
         super().__init__('upper_limb_effort_test_node')
         self.FREQ = 500
         self.DEVICE_FLEXION_TORQUE = 5.0
@@ -24,19 +24,33 @@ class UpperLimbEffortTestNode(Node):
                 self.listener_joint_state_callback,
                 10)
 
-        self.wrench_subscription = self.create_subscription(
+        self.device_arm_joint_torque = 0.0
+        self.upper_limb_wrench_subscription = self.create_subscription(
                 WrenchStamped,
                 '/upper_limb/wrench',
-                self.listener_wrench_callback,
+                self.listener_upper_limb_wrench_callback,
+                10)
+        
+        self.human_arm_joint_torque_cmd = 0.0
+        self.hubman_elbow_joint_torque_subscription = self.create_subscription(
+                Float64MultiArray, 
+                '/forward_command_controller/commands', 
+                self.listener_human_elbow_joint_torque_callback,
                 10)
 
-        # initial phase and device torque
+        # set initial phase and device torque
         self.phase = "flexion"
         self.device_torque = -self.DEVICE_FLEXION_TORQUE
         self.last_valid_device_torque = self.device_torque
 
         # control type: "square_wave", "square_wave_failed", "zero"
-        self.control_type = control_type
+        self.control_type = "square_wave" # default control type is square_wave
+        control_type_parameter = self.declare_parameter('control_type').get_parameter_value().string_value
+        if control_type_parameter in ['square_wave', 'square_wave_failed', 'zero']:
+            self.control_type = control_type_parameter
+        else:
+            self.control_type = 'zero'
+        self.get_logger().info("Control type: %s" % self.control_type)
 
         self.publisher_ = self.create_publisher(Float64MultiArray, '/upper_limb_forward_command_controller/commands', 10)
         self.control_timer = self.create_timer(1.0/self.FREQ, self.control_callback)
@@ -46,13 +60,38 @@ class UpperLimbEffortTestNode(Node):
 
         # export data
         self.start_time = self.get_clock().now()
-        self.published_device_torque = 0.0
+        self.device_arm_joint_torque_cmd = 0.0
         self.export_data_timer = self.create_timer(1.0/30.0, self.export_data_callback)
 
-        with open('/tmp/interaction.csv', 'w', newline='') as file:
+        with open('/tmp/interaction-upper.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([
-                "Timer", "State", "InteractionTorque", "Angle", "MotorTorque"
+                "Timer", "State", "InteractionTorque", "Angle", "MotorTorque", "HumanTorque"
+            ])
+
+        with open('/tmp/wearability-upper.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([
+                "Timer", "Angle"
+            ])
+
+
+        with open('/tmp/visualization-upper.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([
+                "Chest_x", "Chest_y", "Chest_z",
+                "Neck_x", "Neck_y", "Neck_z",
+                "Rhip_x", "Rhip_y", "Rhip_z",
+                "Rknee_z",
+                "Rankle_x", "Rankle_y" , "Rankle_z",
+                "Rshoulder_x", "Rshoulder_y", "Rshoulder_z",
+                "Relbow_z",
+                "Lhip_x", "Lhip_y", "Lhip_z",
+                "Lknee_z",
+                "Lankle_x", "Lankle_y" , "Lankle_z",
+                "Lshoulder_x", "Lshoulder_y", "Lshoulder_z",
+                "Lelbow_z",
+                "Safety_Score"
             ])
 
     def export_data_callback(self):
@@ -60,18 +99,48 @@ class UpperLimbEffortTestNode(Node):
         elapsed_time = current_time - self.start_time
         elapsed_seconds = elapsed_time.nanoseconds / 1e9
 
-        with open('/tmp/interaction.csv', 'a', newline='') as file:
+        with open('/tmp/interaction-upper.csv', 'a', newline='') as file:
             writer = csv.writer(file)
-            data_row = [elapsed_seconds, self.phase, self.arm_joint_torque,
-                        math.degrees(self.arm_joint_position), self.published_device_torque]
+            data_row = [elapsed_seconds, self.phase, self.device_arm_joint_torque,
+                        math.degrees(self.arm_joint_position), self.device_arm_joint_torque_cmd,
+                        self.human_arm_joint_torque_cmd
+                        ]
             writer.writerow(data_row)
+
+
+        with open('/tmp/wearability-upper.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            data_row = [elapsed_seconds, -(math.degrees(self.arm_joint_position)-180)]
+            writer.writerow(data_row)
+
+        with open('/tmp/visualization-upper.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            data_row = [0.0, 0.0, 0.0, 
+                        0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0,
+                        -10.0,
+                        0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0,
+                        0.0,
+                        0.0, 0.0, 0.0,
+                        78.0, # TODO: change model's axis direction
+                        0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0,
+                        round(math.degrees(self.arm_joint_position), 2),
+                        0.25
+                        ]
+            writer.writerow(data_row)
+
 
     def listener_joint_state_callback(self, msg):
         if msg.name == ['arm_joint']:
             self.arm_joint_position = -msg.position[0] - math.radians(90.0)
 
-    def listener_wrench_callback(self, msg):
-        self.arm_joint_torque = msg.wrench.torque.x
+    def listener_upper_limb_wrench_callback(self, msg):
+        self.device_arm_joint_torque = msg.wrench.torque.x
+
+    def listener_human_elbow_joint_torque_callback(self, msg):
+        self.human_arm_joint_torque_cmd = msg.data[0]
 
     def square_wave_torque_control(self):
         if self.phase == "extension":
@@ -110,7 +179,7 @@ class UpperLimbEffortTestNode(Node):
         commands = Float64MultiArray()
         commands.data.append(self.device_torque)
         self.publisher_.publish(commands)
-        self.published_device_torque = self.device_torque
+        self.device_arm_joint_torque_cmd = self.device_torque
 
         print(f"device {self.phase}: {self.arm_joint_position}, {self.device_torque} ")
 
@@ -122,9 +191,7 @@ class UpperLimbEffortTestNode(Node):
 def main(args=None):
     rclpy.init(args=args)
 
-    effort_test_node = UpperLimbEffortTestNode(control_type="square_wave")
-    #effort_test_node = UpperLimbEffortTestNode(control_type="square_wave_failed")
-    #effort_test_node = UpperLimbEffortTestNode(control_type="zero")
+    effort_test_node = UpperLimbEffortTestNode()
 
     try:    
         rclpy.spin(effort_test_node)
