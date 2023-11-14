@@ -108,14 +108,7 @@ class HumanArmEffortTestNode(Node):
         kI = 0.15
         kD = 20.0
         C = 0.0
-
-        if self.cnt > self.FREQ*2*2 * 10:
-            commands = Float64MultiArray()
-            commands.data.append(0.0)
-            self.publisher_.publish(commands)
-            print(f"stopped! reference motion: {self.arm_joint_position}, {0.0} ")
-            return
-
+        
         current_reference_position = self.reference_motions_one_cycle[self.cnt % (self.FREQ*2*2)] 
         self.error = self.arm_joint_position - current_reference_position
         self.error_cum += self.error
@@ -130,14 +123,14 @@ class HumanArmEffortTestNode(Node):
 
         # with external torque 
         # TODO: check the direction of torque
-        human_torque = human_torque - self.filtered_device_torque
+        human_torque_cmd = human_torque - self.filtered_device_torque
 
-        commands.data.append(-human_torque)
+        commands.data.append(-human_torque_cmd)
         self.publisher_.publish(commands)
 
         # logging
         phase = "flexion" if self.cnt % (self.FREQ*2*2) < self.FREQ*2 else "extension"
-        print(f"human {phase}: {round(math.degrees(current_reference_position),1)}, {round(math.degrees(self.arm_joint_position),1)}, {-human_torque} ")
+        print(f"human {phase}: {round(math.degrees(current_reference_position),1)}, {round(math.degrees(self.arm_joint_position),1)}, {-human_torque_cmd} ")
        
         self.cnt += 1
 
