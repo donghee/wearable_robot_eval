@@ -56,12 +56,16 @@ install_emacs() {
 install_node() {
   NODE_VERSION=$1
 
-  $RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.5/install.sh | bash
-  
-  . $HOME/.nvm/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default
+  # nvm
+  echo 'export NVM_DIR="$HOME/.nvm"'                                       >> "$HOME/.bashrc"
+  echo '[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm' >> "$HOME/.bashrc"
+  echo '[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion" # This loads nvm bash_completion' >> "$HOME/.bashrc"
+
+  # nodejs and tools
+  curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+  bash -c 'source $HOME/.nvm/nvm.sh   && \
+      nvm install node            && \
+      nvm use default'
 }
 
 install_rust() {
@@ -82,6 +86,11 @@ install_python() {
   curl -sSL https://install.python-poetry.org | python3 -
   export PYENV_ROOT="$HOME/.pyenv"
   export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$HOME/.local/bin:$PATH"
+
+  echo 'export PYENV_ROOT="$HOME/.pyenv"'  >> "$HOME/.bashrc"
+  echo 'command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"'  >> "$HOME/.bashrc"
+  echo 'eval "$(pyenv init -)"'  >> "$HOME/.bashrc"
+  echo 'eval "$(pyenv virtualenv-init -)"'  >> "$HOME/.bashrc"
 
   pyenv install ${PYTHON_VERSION} && \
     pyenv global ${PYTHON_VERSION} && \
