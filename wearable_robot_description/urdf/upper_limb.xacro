@@ -74,7 +74,7 @@
       </visual>
       <collision>
         <geometry>
-          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.060 0.050 0.01"/>
+          <mesh filename="$(find wearable_robot_description)/meshes/pipe.dae" scale="0.060 0.055 0.01"/>
         </geometry>
         <!-- <origin rpy="1.570796 1.570796 0" xyz="0.0 -0.025 0.0"/> -->
         <origin rpy="1.570796 1.570796 0" xyz="-0.0050 -0.025 0.0"/>
