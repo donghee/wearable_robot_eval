@@ -18,14 +18,28 @@ def init_fifo():
     if not os.path.exists(FIFO_RX_FILE):
         os.mkfifo(FIFO_RX_FILE)
 
-def start_wearable_evaluation(device="upper"):
+def start_wearable_evaluation(device="upper", code="1"):
     manager_logger.info('start wearable evaluation')
     #subprocess.call(['gnome-terminal', '--', 'bash', '-c', 'cd ~/ros2_ws/src/wearabie_robot_eval && ./run_eval_human_66dof.sh'])
 #    wearable_eval_proc = subprocess.call(['terminator', '-x', 'bash', '-c', '~/ros2_ws/src/wearable_robot_eval/run_eval_human_66dof.sh; read -p \"Press any key... \" -n1'])
     if device == "upper":
-        cmd = ['bash', '-c', 'cd ~/ros2_ws && colcon build && source ./install/setup.bash && ros2 launch wearable_robot_gazebo human_45dof_wearing_upper_limb_effort_control.launch.py']
+        control_type = "square_wave"
+        if code == "1":
+            control_type = "square_wave"
+        else: # TODO
+            control_type = "square_wave_failed"
+
+        cmd = ['bash', '-c', f'cd ~/ros2_ws && colcon build && source ./install/setup.bash && ros2 launch wearable_robot_gazebo human_45dof_wearing_upper_limb_effort_control.launch.py control_type:={control_type}']
     else:
-        cmd = ['bash', '-c', 'cd ~/ros2_ws && colcon build && source ./install/setup.bash && ros2 launch wearable_robot_gazebo human_45dof_wearing_lower_limb_position_control.launch.py']
+        control_type = "normal"
+        if code == "1":
+            control_type = "normal"
+        elif code =="2":
+            control_type = "torque_limit"
+        elif code =="3":
+            control_type = "rom_limit"
+
+        cmd = ['bash', '-c', f'cd ~/ros2_ws && colcon build && source ./install/setup.bash && ros2 launch wearable_robot_gazebo human_45dof_wearing_lower_limb_position_control.launch.py control_type:={control_type}']
     try:
         wearable_eval_proc = subprocess.Popen(cmd, start_new_session=True)
         wearable_eval_proc.wait(timeout=25)
@@ -48,10 +62,11 @@ def listen_ros_command():
             line = fifo.readline()
             print(line)
             if line.startswith('start'):
+                code = line.split()[-1]
                 if 'upper' in line:
-                    start_wearable_evaluation('upper')
+                    start_wearable_evaluation('upper', code)
                 if 'lower' in line:
-                    start_wearable_evaluation('lower')
+                    start_wearable_evaluation('lower', code)
 
 
 

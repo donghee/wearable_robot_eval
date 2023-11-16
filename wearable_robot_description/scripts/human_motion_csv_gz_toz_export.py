@@ -67,15 +67,20 @@ def euler_from_quaternion(q):
 class Animator(Node):
     def __init__(self):
         super().__init__('animator')
-
-        #  self.in_dir = self.declare_parameter("in_dir", "./motions").value
         self.speed = self.declare_parameter("speed", 0.005).value
-        #self.store_converted = self.declare_parameter("store_converted", False).value
 
-        #self.files = []
-        #file_query = os.path.join(self.in_dir, "human_controller*.txt")
-        #motion_file = os.path.join("/tmp", "human_controller1_normal.txt")
+        # control type: "normal", "torque_limit", "rom_limit"
+        control_type_parameter = self.declare_parameter('control_type').get_parameter_value().string_value
         self.motion_file = "/tmp/human_controller1_normal.txt"
+        if control_type_parameter  == "normal":
+            self.motion_file = "/tmp/human_controller1_normal.txt"
+        elif control_type_parameter  == "torque_limit":
+            self.motion_file = "/tmp/human_controller2_torqueLimit.txt"
+        elif control_type_parameter  == "rom_limit":
+            self.motion_file = "/tmp/human_controller3_romLimit.txt"
+
+        self.get_logger().info("Control Type: %s" % control_type_parameter)
+        self.get_logger().info("Motion File: %s" % self.motion_file)
 
         self.tf_broadcaster = tf2_ros.TransformBroadcaster(self)
 
@@ -85,7 +90,7 @@ class Animator(Node):
         #self.load_next_json()
         self.load_json()
 
-        with open('/tmp/lower.csv', 'w', newline='') as file:
+        with open('/tmp/visualization-lower.csv', 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([
                 "Chest_x", "Chest_y", "Chest_z",
@@ -190,7 +195,7 @@ class Animator(Node):
 
         c = self.get_joint_commands(frame)
 
-        with open('/tmp/lower.csv', 'a', newline='') as file:
+        with open('/tmp/visualization-lower.csv', 'a', newline='') as file:
             writer = csv.writer(file)
             data_row = [round(math.degrees(x), 2) for x in c.data]
             data_row.append(0.25) # safe score
