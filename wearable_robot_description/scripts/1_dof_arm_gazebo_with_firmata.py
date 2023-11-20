@@ -80,9 +80,8 @@ def main(args=None):
     rclpy.init()
 
     action_client = OneDofArmActionClient()
-
     angle = float(sys.argv[1])
-    future = action_client.send_goal(angle)
+    action_client.send_goal(angle)
 
     move_servo(int((angle - 2.0)  * 50))
 
@@ -91,7 +90,8 @@ def main(args=None):
 
 def move_servo2(angle):
     action_client = OneDofArmActionClient()
-    future = action_client.send_goal(float(angle))
+    action_client.send_goal(float(angle))
+
     rclpy.spin_once(action_client)
 
     a = int((float(angle) -2.0) * 50)

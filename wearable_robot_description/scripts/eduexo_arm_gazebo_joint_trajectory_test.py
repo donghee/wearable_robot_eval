@@ -92,7 +92,7 @@ class OneDofArmActionClient(Node):
 
     def feedback_callback(self, feedback_msg):
         feedback = feedback_msg.feedback
-        #self.get_logger().info('Received feedback:'+str(feedback))
+        self.get_logger().info('Received feedback:'+str(feedback))
 
 
 def main(args=None):
@@ -102,7 +102,7 @@ def main(args=None):
     action_client = OneDofArmActionClient()
 
     angle = float(sys.argv[1])
-    future = action_client.send_goal(angle)
+    action_client.send_goal(angle)
 
     rclpy.spin(action_client)
 
