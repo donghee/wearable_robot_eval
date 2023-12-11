@@ -1,11 +1,12 @@
 #!/usr/bin/python3.8
 
-
 import logging
 import os
 import signal
 import subprocess
 import sys
+import psutil
+import time
 
 FIFO_RX_FILE = '/tmp/wde_ros_tx'
 FIFO_TX_FILE = '/tmp/wde_ros_rx'
@@ -17,6 +18,32 @@ def init_fifo():
         os.mkfifo(FIFO_TX_FILE)
     if not os.path.exists(FIFO_RX_FILE):
         os.mkfifo(FIFO_RX_FILE)
+
+def kill_processes(pid):
+    def on_terminate(proc):
+        print("process {} terminated with exit code {}".format(proc, proc.returncode))
+    '''Kills parent and children processess'''
+
+    os.system('pkill -SIGTERM gzclient')
+    #os.system('pkill -SIGKILL gzclient')
+    os.system('pkill -SIGTERM gzserver')
+    #os.system('pkill -SIGKILL gzserver')
+    time.sleep(2)
+
+    parent = psutil.Process(pid)
+    children = parent.children(recursive=True)
+
+    # kill all the child processes
+    for child in children:
+        print(child)
+        child.terminate()
+    _, still_alive = psutil.wait_procs(children, timeout=3, callback=on_terminate )
+    for child in still_alive:
+        child.kill()
+
+    # kill the parent process
+    print(parent)
+    parent.kill()
 
 def start_wearable_evaluation(device="upper", code="1"):
     manager_logger.info('start wearable evaluation')
@@ -45,7 +72,7 @@ def start_wearable_evaluation(device="upper", code="1"):
         wearable_eval_proc.wait(timeout=25)
     except subprocess.TimeoutExpired:
         print('Evaluation Timeout', file=sys.stderr)
-        os.killpg(os.getpgid(wearable_eval_proc.pid), signal.SIGTERM)
+        kill_processes(wearable_eval_proc.pid)
         with open(FIFO_TX_FILE, 'w') as fifo:
             fifo.write('finish')
             return
