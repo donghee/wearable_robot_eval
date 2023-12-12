@@ -43,7 +43,11 @@ def kill_processes(pid):
 
     # kill the parent process
     print(parent)
+    parent.terminate()
+    time.sleep(2)
     parent.kill()
+
+    time.sleep(4)
 
 def start_wearable_evaluation(device="upper", code="1"):
     manager_logger.info('start wearable evaluation')
