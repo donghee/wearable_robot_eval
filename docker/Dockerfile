@@ -105,8 +105,8 @@ RUN pip3 install -U \
     pytest-rerunfailures
 # This is a workaround for pytest not found causing builds to fail
 # Following RUN statements tests for regression of https://github.com/ros2/ros2/issues/722
-RUN pip3 freeze | grep pytest \
-    && python3 -m pytest --version
+#RUN pip3 freeze | grep pytest \
+#    && python3 -m pytest --version
 
 # bootstrap rosdep
 RUN rosdep init \
@@ -175,18 +175,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
 
-ARG TURBOVNC_VERSION=3.0.3
-ARG VIRTUALGL_VERSION=3.1
-ARG LIBJPEG_VERSION=2.1.5.1
+ARG TURBOVNC_VERSION=3.1.2
+ARG VIRTUALGL_VERSION=3.1.1
+ARG LIBJPEG_VERSION=3.0.3
 
 RUN cd /tmp && \
-    curl -O https://nchc.dl.sourceforge.net/project/turbovnc/${TURBOVNC_VERSION}/turbovnc_${TURBOVNC_VERSION}_amd64.deb
+    curl -O -L https://github.com/TurboVNC/turbovnc/releases/download/${TURBOVNC_VERSION}/turbovnc_${TURBOVNC_VERSION}_amd64.deb
 RUN cd /tmp && \
-    curl -L -O https://nchc.dl.sourceforge.net/project/libjpeg-turbo/${LIBJPEG_VERSION}/libjpeg-turbo-official_${LIBJPEG_VERSION}_amd64.deb
+    curl -O -L https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/${LIBJPEG_VERSION}/libjpeg-turbo-official_${LIBJPEG_VERSION}_amd64.deb
 RUN cd /tmp && \
-    curl -O https://nchc.dl.sourceforge.net/project/virtualgl/${VIRTUALGL_VERSION}/virtualgl_${VIRTUALGL_VERSION}_amd64.deb
-#RUN cd /tmp && \
-#    curl -O https://master.dl.sourceforge.net/project/virtualgl/${VIRTUALGL_VERSION}/virtualgl32_${VIRTUALGL_VERSION}_amd64.deb?viasf=1
+    curl -O -L https://github.com/VirtualGL/virtualgl/releases/download/${VIRTUALGL_VERSION}/virtualgl_${VIRTUALGL_VERSION}_amd64.deb
 
 RUN cd /tmp && \
     dpkg -i *.deb && \
@@ -320,9 +318,10 @@ COPY files/nginx.conf /etc/nginx/sites-available/default
 RUN sudo chown -R $USER:$USER $HOME
 
 COPY ./bootstrap.sh /
-# dev enviroments
-COPY ./dev_bootstrap.sh /
 COPY ./ros_entrypoint.sh /
+
+# dev enviroments
+COPY ./bootstrap.dev.sh /
 
 # nginx
 COPY files/nginx.conf /etc/nginx/sites-enabled/default
