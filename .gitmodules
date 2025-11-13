@@ -1,0 +1,12 @@
+[submodule "wearable_robot_mujoco"]
+	path = wearable_robot_mujoco
+	url = https://github.com/donghee/wearable_robot_mujoco
+[submodule "wearable_ui_backend"]
+	path = wearable_ui_backend
+	url = https://github.com/donghee/wearable_ui_backend
+[submodule "wearable_ui_frontend"]
+	path = wearable_ui_frontend
+	url = https://github.com/donghee/wearable_ui_frontend
+[submodule "wearable_vscode_extention"]
+	path = wearable_vscode_extention
+	url = https://github.com/donghee/wearable_vscode_extention
