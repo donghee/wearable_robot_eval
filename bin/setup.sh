@@ -27,3 +27,9 @@ sudo dpkg -i vscode.deb
 rm vscode.deb
 
 code --install-extension ./wearable_vscode_extention/wearable-vscode-extension-0.0.1.vsix
+rm ./wearable_vscode_extention/wearable-vscode-extension-0.0.1.vsix
+
+# Running wearable robot development environment
+echo "Setup complete! To run the wearable robot development environment, follow these steps:"
+echo "cd ~/wearable_robot_eval"
+echo "./bin/run.sh"
