@@ -24,7 +24,9 @@ WIDTH=$(echo $DISPLAY_SIZE | cut -d'x' -f1)
 HEIGHT=$(echo $DISPLAY_SIZE | cut -d'x' -f2)
 WIDTH_TWO_THIRDS=$((WIDTH * 2 / 3))
 WIDTH_ONE_THIRD=$((WIDTH / 3))
-wmctrl -r "Visual Studio Code" -e "0,0,0,$WIDTH_TWO_THIRDS,$HEIGHT"
+for vscode_window in $(wmctrl -l | grep "Visual Studio Code" | awk '{print $1}'); do
+  wmctrl -ir $vscode_window -e "0,0,0,$WIDTH_TWO_THIRDS,$HEIGHT"
+done
 
 echo "Waiting for services to start..."
 sleep 10

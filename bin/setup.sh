@@ -29,6 +29,9 @@ rm vscode.deb
 code --install-extension ./wearable_vscode_extention/wearable-vscode-extension-0.0.1.vsix
 rm ./wearable_vscode_extention/wearable-vscode-extension-0.0.1.vsix
 
+# Alignment for vscode and simulation window
+sudo apt install wmctrl x11-utils -y
+
 # Running wearable robot development environment
 echo "Setup complete! To run the wearable robot development environment, follow these steps:"
 echo "cd ~/wearable_robot_eval"
