@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wearable Robot API 문서</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            text-align: center;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            background-color: #f8f9ff;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+
+        h3 code {
+            background-color: #e8eaff;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+
+        pre {
+            background-color: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: #abb2bf;
+            padding: 0;
+            font-size: 0.95em;
+        }
+
+        .method-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .param, .returns, .example {
+            margin-top: 15px;
+        }
+
+        .param strong, .returns strong, .example strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .note strong {
+            color: #856404;
+        }
+
+        hr {
+            border: none;
+            border-top: 2px solid #e0e0e0;
+            margin: 30px 0;
+        }
+
+        .toc {
+            background-color: #f8f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #e0e0ff;
+        }
+
+        .toc h3 {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .toc ul {
+            list-style-type: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 5px;
+        }
+
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .keyword {
+            color: #c678dd;
+        }
+
+        .string {
+            color: #98c379;
+        }
+
+        .comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        .function {
+            color: #61afef;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Wearable Robot API 문서</h1>
+            <p>상지 외골격 로봇 제어 API</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            <h2 id="overview">개요</h2>
+            <p>Upperlimb_1DOF는 상지 외골격 로봇을 제어하기 위한 싱글톤 API 클래스입니다.</p>
+
+            <div class="toc">
+                <h3>목차</h3>
+                <ul>
+                    <li><a href="#setup">사용 예제 - setup()</a></li>
+                    <li><a href="#loop">사용 예제 - loop()</a></li>
+                    <li><a href="#class">Upperlimb_1DOF class</a></li>
+                    <li><a href="#init-constructor">__init__() - 생성자</a></li>
+                    <li><a href="#init-method">init() - 초기화</a></li>
+                    <li><a href="#get-target-angle">get_target_angle()</a></li>
+                    <li><a href="#get-velocity">get_velocity()</a></li>
+                    <li><a href="#set-velocity">set_velocity()</a></li>
+                    <li><a href="#get-velocity-cmd">get_velocity_cmd()</a></li>
+                    <li><a href="#get-previous-velocity">get_previous_velocity()</a></li>
+                    <li><a href="#set-previous-velocity">set_previous_velocity()</a></li>
+                    <li><a href="#get-force">get_force()</a></li>
+                    <li><a href="#get-position">get_position()</a></li>
+                    <li><a href="#get-moment">get_moment()</a></li>
+                    <li><a href="#get-spring">get_spring()</a></li>
+                    <li><a href="#get-damping">get_damping()</a></li>
+                    <li><a href="#rep-count">rep_count</a></li>
+                    <li><a href="#freq">freq</a></li>
+                </ul>
+            </div>
+
+            <h2 id="setup">사용 예제</h2>
+
+            <div class="method-section">
+                <h3 id="setup-example">setup()</h3>
+                <pre><code><span class="keyword">from</span> wearable_robot_api <span class="keyword">import</span> Upperlimb_1DOF
+
+robot = Upperlimb_1DOF(node)
+
+<span class="keyword">def</span> <span class="function">setup</span>():
+    <span class="comment"># 초기화 (반복 횟수, 주파수 설정)</span>
+    robot.init(rep_count=<span class="string">20</span>, freq=<span class="string">60</span>)</code></pre>
+            </div>
+
+            <div class="method-section">
+                <h3 id="loop-example">loop()</h3>
+                <pre><code><span class="comment"># 제어 루프 내에서 API 사용 예제</span>
+<span class="keyword">def</span> <span class="function">loop</span>():
+    <span class="comment"># 센서 값 읽기</span>
+    current_angle = robot.get_target_angle()
+    current_velocity = robot.get_velocity()
+    current_force = robot.get_force()
+    current_position = robot.get_position()
+
+    <span class="comment"># 속도 명령 설정</span>
+    robot.set_velocity(desired_velocity)
+
+    <span class="comment"># 제어 파라미터 읽기</span>
+    damping = robot.get_damping()
+    spring = robot.get_spring()
+    moment = robot.get_moment()</code></pre>
+            </div>
+
+            <hr>
+
+            <h2 id="api-reference">API 레퍼런스</h2>
+
+            <div class="method-section">
+                <h3 id="class"><code>Upperlimb_1DOF</code> class</h3>
+                <p>상지 외골격 로봇 제어를 위한 싱글톤 클래스입니다.</p>
+                <div class="param">
+                    <strong>특징:</strong>
+                    <ul>
+                        <li>싱글톤 패턴으로 구현되어 프로그램 내에서 하나의 인스턴스만 존재</li>
+                        <li>ROS2 노드와 연동하여 동작</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="init-constructor"><code>Upperlimb_1DOF.__init__(node=None)</code></h3>
+                <p>클래스 생성자입니다.</p>
+                <div class="param">
+                    <strong>매개변수:</strong>
+                    <ul>
+                        <li><code>node</code> (optional): ROS2 노드 객체</li>
+                    </ul>
+                </div>
+                <div class="param">
+                    <strong>초기화 속성:</strong>
+                    <ul>
+                        <li><code>rep_count</code>: 반복 횟수 (기본값: 0)</li>
+                        <li><code>freq</code>: 주파수 (기본값: 60)</li>
+                        <li><code>velocity_cmd</code>: 속도 명령 (기본값: 0.0)</li>
+                        <li><code>DELTA_TIME</code>: 시간 간격 (기본값: 0.02초)</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>robot = Upperlimb_1DOF(node)</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="init-method"><code>init(rep_count=20, freq=60)</code></h3>
+                <p>상지 제어 파라미터를 초기화합니다.</p>
+                <div class="param">
+                    <strong>매개변수:</strong>
+                    <ul>
+                        <li><code>rep_count</code> (int): 목표 반복 횟수 (기본값: 20)</li>
+                        <li><code>freq</code> (int): 제어 주파수 (기본값: 60Hz)</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>robot.init(rep_count=<span class="string">30</span>, freq=<span class="string">50</span>)</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="get-target-angle"><code>get_target_angle()</code></h3>
+                <p>현재 목표 각도를 반환합니다.</p>
+                <div class="returns">
+                    <strong>반환값:</strong>
+                    <ul>
+                        <li><code>float</code>: 목표 각도 (degrees)</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>angle = robot.get_target_angle()
+<span class="function">print</span>(<span class="string">f"Target angle: {angle}°"</span>)</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="get-velocity"><code>get_velocity()</code></h3>
+                <p>현재 센서 속도를 반환합니다.</p>
+                <div class="returns">
+                    <strong>반환값:</strong>
+                    <ul>
+                        <li><code>float</code>: 현재 속도</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>velocity = robot.get_velocity()</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="set-velocity"><code>set_velocity(velocity)</code></h3>
+                <p>속도 명령을 설정합니다.</p>
+                <div class="param">
+                    <strong>매개변수:</strong>
+                    <ul>
+                        <li><code>velocity</code> (float): 설정할 속도 값</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>robot.set_velocity(<span class="string">1.5</span>)</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="get-velocity-cmd"><code>get_velocity_cmd()</code></h3>
+                <p>현재 설정된 속도 명령을 반환합니다.</p>
+                <div class="returns">
+                    <strong>반환값:</strong>
+                    <ul>
+                        <li><code>float</code>: 속도 명령 값</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>cmd = robot.get_velocity_cmd()</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="get-previous-velocity"><code>get_previous_velocity()</code></h3>
+                <p>이전 센서 속도를 반환합니다.</p>
+                <div class="returns">
+                    <strong>반환값:</strong>
+                    <ul>
+                        <li><code>float</code>: 이전 속도 값</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>prev_vel = robot.get_previous_velocity()</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="set-previous-velocity"><code>set_previous_velocity(velocity)</code></h3>
+                <p>이전 센서 속도를 설정합니다.</p>
+                <div class="param">
+                    <strong>매개변수:</strong>
+                    <ul>
+                        <li><code>velocity</code> (float): 설정할 이전 속도 값</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>robot.set_previous_velocity(<span class="string">1.0</span>)</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="get-force"><code>get_force()</code></h3>
+                <p>현재 센서 힘을 반환합니다.</p>
+                <div class="returns">
+                    <strong>반환값:</strong>
+                    <ul>
+                        <li><code>float</code>: 현재 힘 값</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>force = robot.get_force()</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="get-position"><code>get_position()</code></h3>
+                <p>현재 센서 위치를 반환합니다.</p>
+                <div class="returns">
+                    <strong>반환값:</strong>
+                    <ul>
+                        <li><code>float</code>: 현재 위치 값</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>position = robot.get_position()</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="get-moment"><code>get_moment()</code></h3>
+                <p>관성 모멘트 계수를 반환합니다.</p>
+                <div class="returns">
+                    <strong>반환값:</strong>
+                    <ul>
+                        <li><code>float</code>: 관성 모멘트 (기본값: 0.0)</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>moment = robot.get_moment()</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="get-spring"><code>get_spring()</code></h3>
+                <p>스프링 계수를 반환합니다.</p>
+                <div class="returns">
+                    <strong>반환값:</strong>
+                    <ul>
+                        <li><code>float</code>: 스프링 계수 (기본값: 0.0)</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>spring = robot.get_spring()</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="get-damping"><code>get_damping()</code></h3>
+                <p>댐핑 계수를 반환합니다.</p>
+                <div class="returns">
+                    <strong>반환값:</strong>
+                    <ul>
+                        <li><code>float</code>: 댐핑 계수 (기본값: 100.0)</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>damping = robot.get_damping()</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="rep-count"><code>rep_count</code></h3>
+                <p>목표 반복 횟수를 저장하는 속성입니다.</p>
+                <div class="returns">
+                    <strong>타입:</strong>
+                    <ul>
+                        <li><code>int</code></li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>total_reps = robot.rep_count</code></pre>
+                </div>
+            </div>
+
+            <div class="method-section">
+                <h3 id="freq"><code>freq</code></h3>
+                <p>제어 주파수를 저장하는 속성입니다.</p>
+                <div class="returns">
+                    <strong>타입:</strong>
+                    <ul>
+                        <li><code>int</code> (기본값: 60Hz)</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>control_freq = robot.freq</code></pre>
+                </div>
+            </div>
+
+            <hr>
+
+            <h2 id="additional">추가 속성</h2>
+
+            <div class="method-section">
+                <h3 id="target-th"><code>target_th</code> (property)</h3>
+                <p>목표 각도를 라디안 단위로 반환하는 읽기 전용 속성입니다.</p>
+                <div class="returns">
+                    <strong>반환값:</strong>
+                    <ul>
+                        <li><code>float</code>: 목표 각도 (radians)</li>
+                    </ul>
+                </div>
+                <div class="example">
+                    <strong>예제:</strong>
+                    <pre><code>angle_rad = robot.target_th</code></pre>
+                </div>
+            </div>
+
+            <hr>
+
+            <h2 id="notes">주의사항</h2>
+            <div class="note">
+                <strong>중요:</strong>
+                <ol>
+                    <li>이 클래스는 싱글톤 패턴으로 구현되어 있어 여러 번 생성해도 같은 인스턴스를 반환합니다.</li>
+                    <li>ROS2 노드가 없으면 센서 값들은 0.0을 반환합니다.</li>
+                    <li><code>DELTA_TIME</code>은 노드에서 제공되는 값을 사용하며, 없을 경우 0.02초를 기본값으로 사용합니다.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
